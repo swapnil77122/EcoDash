@@ -31,17 +31,17 @@ const SeaLevel = () => {
   return (
     <div className="p-6 space-y-6">
       <Card>
-        <h1 className="text-2xl font-bold">🌊 Global Sea Level Rise</h1>
+        <h1 className="text-2xl font-bold text-white">🌊 Global Sea Level Rise</h1>
         <p className="text-gray-600 text-sm">
           Observe sea level changes over time from NOAA data.
         </p>
       </Card>
 
       <div className="flex justify-between items-center">
-        <h2 className="text-xl font-semibold">📉 Sea Level Trends</h2>
+        <h2 className="text-xl font-semibold text-white">📉 Sea Level Trends</h2>
         <button
           onClick={handleDownloadPDF}
-          className="bg-blue-600 text-white px-4 py-2 rounded"
+          className="bg-blue-600 text-white px-4 py-2 rounded text-white"
         >
           📄 Download Raw Data
         </button>

@@ -53,7 +53,7 @@ const EnergyComparisonChart = forwardRef(({ refData }, _) => {
 
   return (
     <div className="bg-white p-4 rounded shadow">
-      <h3 className="text-lg font-bold mb-4">
+      <h3 className="text-lg font-bold mb-4 ">
         🔋 Renewable vs Non-Renewable Energy (TWh)
       </h3>
       <ResponsiveContainer width="100%" height={400}>

@@ -62,25 +62,28 @@ export default function Emissions() {
     pdf.save('CO2_Emissions_Report.pdf');
   };
 
+  
   return (
-    <div>
-      <h2 className="text-2xl font-semibold mb-4">Global CO₂ Levels</h2>
+  <div className="min-h-[calc(100vh-2rem)] p-8 flex flex-col">
+    <h2 className="text-2xl font-semibold mb-4 text-white">Global CO₂ Levels</h2>
 
-      {error && <p className="text-red-600">{error}</p>}
-      {!data && !error && <p>Loading...</p>}
+    {error && <p className="text-red-600">{error}</p>}
+    {!data && !error && <p>Loading...</p>}
 
-      <div ref={chartRef}>
-        {data && <CO2BarChart data={data} />}
-      </div>
-
-      {data && (
-        <button
-          onClick={handleDownloadPDF}
-          className="mt-4 bg-blue-600 text-white px-4 py-2 rounded"
-        >
-          📄 Download PDF Report
-        </button>
-      )}
+    <div ref={chartRef} className="flex-1 ">
+      {data && <CO2BarChart data={data} />}
     </div>
-  );
+
+    {data && (
+      <button
+        onClick={handleDownloadPDF}
+        className="mt-6 bg-blue-600 text-white px-4 py-2 rounded self-start"
+      >
+        📄 Download PDF Report
+      </button>
+    )}
+  </div>
+);
+
+
 }

@@ -29,7 +29,7 @@ const Overview = () => {
     <div className="p-6 space-y-6">
       {/* 🔹 Header */}
       <Card>
-        <h1 className="text-2xl font-bold mb-2">🌍 Global Climate Insights Dashboard</h1>
+        <h1 className="text-2xl font-bold mb-2 text-white">🌍 Global Climate Insights Dashboard</h1>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-gray-600">
           <p>🔺 Avg Temp: 1.1°C ↑</p>
           <p>🟢 CO2: 417 ppm ↑</p>
@@ -41,31 +41,31 @@ const Overview = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* 🔸 Global Temperature Chart */}
         <Card>
-          <h2 className="text-xl font-semibold mb-4">📈 Global Temperature Over Time</h2>
+          <h2 className="text-xl font-semibold mb-4 text-white">📈 Global Temperature Over Time</h2>
           <GlobalTempChart />
         </Card>
 
         {/* 🔸 CO2 Bar Chart */}
         <Card>
-          <h2 className="text-xl font-semibold mb-4">🌍 Top 10 Emitters (2024)</h2>
+          <h2 className="text-xl font-semibold mb-4 text-white">🌍 Top 10 Emitters (2024)</h2>
           <CO2BarChart />
         </Card>
 
         {/* 🔸 CO2 Map */}
         <Card>
-          <h2 className="text-xl font-semibold mb-4">🗺️ CO2 Emissions by Country</h2>
+          <h2 className="text-xl font-semibold mb-4 text-white">🗺️ CO2 Emissions by Country</h2>
           {loading ? (
-            <p className="text-gray-500">Loading CO₂ map data...</p>
+            <p className="text-gray-500 text-white">Loading CO₂ map data...</p>
           ) : geoData ? (
             <CO2Map data={geoData} />
           ) : (
-            <p className="text-red-500">Failed to load CO₂ map data.</p>
+            <p className="text-red-500 text-white">Failed to load CO₂ map data.</p>
           )}
         </Card>
 
         {/* 🔸 AQI Search */}
         <Card className="w-full min-h-fit">
-  <h2 className="text-xl font-semibold mb-4">🌫️ Live AQI by City</h2>
+  <h2 className="text-xl font-semibold mb-4 text-white">🌫️ Live AQI by City</h2>
   
   <div className="flex flex-col md:flex-row md:items-center gap-4 mb-4">
     <input
@@ -77,7 +77,7 @@ const Overview = () => {
     />
     <button
       onClick={handleAQISearch}
-      className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 w-full md:w-auto"
+      className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 w-full md:w-auto "
     >
       Get AQI
     </button>

@@ -52,9 +52,9 @@ const CO2BarChart = () => {
   }, [year, rawData]);
 
   return (
-    <div className="w-full">
+    <div className="w-full mt-8">
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-lg font-semibold">CO₂ Emissions by Country</h2>
+        <h2 className="text-lg font-semibold text-white">CO₂ Emissions by Country</h2>
         <select
           value={year}
           onChange={e => setYear(e.target.value)}
@@ -67,7 +67,7 @@ const CO2BarChart = () => {
       </div>
 
       {data.length === 0 ? (
-        <div className="text-center">Loading data...</div>
+        <div className="text-center text-white">Loading data...</div>
       ) : (
         <ResponsiveContainer width="100%" height={300}>
           <BarChart data={data}>
