@@ -1,5 +1,8 @@
-const Card = ({ children }) => (
-  <div className="bg-white rounded-xl shadow-md p-4">{children}</div>
+// src/components/ui/Card.jsx
+export const Card = ({ children, className }) => (
+  <div className={`rounded-xl border p-4 shadow ${className}`}>{children}</div>
 );
 
-export default Card;
+export const CardContent = ({ children, className }) => (
+  <div className={className}>{children}</div>
+);

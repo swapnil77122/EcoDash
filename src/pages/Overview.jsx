@@ -3,7 +3,7 @@ import GlobalTempChart from "../components/charts/GlobalTempChart";
 import CO2BarChart from "../components/charts/CO2BarChart";
 import CO2Map from "../components/maps/CO2Map";
 import { fetchAQIByCity } from "../services/waqi";
-import Card from "../components/ui/Card";
+import { Card, CardContent } from "../components/ui/Card";
 import useCO2GeoData from "../hooks/useCO2GeoData";
 
 const Overview = () => {

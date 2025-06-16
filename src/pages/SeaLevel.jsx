@@ -1,4 +1,4 @@
-import Card from "../components/ui/Card";
+import { Card, CardContent } from "../components/ui/Card";
 import SeaLevelLineChart from "../components/charts/SeaLevelLineChart";
 import { useRef } from "react";
 import jsPDF from "jspdf";
