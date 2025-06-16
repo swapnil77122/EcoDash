@@ -1,3 +1,4 @@
+// src/pages/AirQuality.jsx
 import { useState, useRef } from "react";
 import { fetchAQIByCity } from "../services/waqi";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
@@ -20,8 +21,7 @@ const AirQuality = () => {
   const [position, setPosition] = useState([20, 0]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-
-  const exportRef = useRef(null); // ⬅️ Wrap AQI info + Map
+  const exportRef = useRef(null);
 
   const handleSearch = async () => {
     setLoading(true);
@@ -42,7 +42,7 @@ const AirQuality = () => {
   const handleDownloadPDF = async () => {
     if (exportRef.current) {
       const canvas = await html2canvas(exportRef.current, {
-        useCORS: true, // helps with leaflet map tiles
+        useCORS: true,
         allowTaint: true,
         scale: 2,
       });
@@ -58,12 +58,13 @@ const AirQuality = () => {
   };
 
   return (
-    <div className="space-y-4">
-      <h2 className="text-white bg-gray-800 text-2xl font-bold p-2 rounded">
-        Global Air Quality
-      </h2>
+<div className="min-h-screen p-4 bg-gray-800 text-black">
+      <h2 className="text-white text-2xl font-bold mb-4">
+  🌍 Global Air Quality
+</h2>
 
-      <div className="flex gap-2">
+
+      <div className="flex gap-2 mb-4">
         <input
           type="text"
           placeholder="Enter city name (e.g., Delhi)"
@@ -73,7 +74,7 @@ const AirQuality = () => {
         />
         <button
           onClick={handleSearch}
-          className="px-4 py-2 bg-blue-600 text-white rounded"
+          className="px-4 py-2 bg-blue-600 text-black rounded"
           disabled={loading}
         >
           {loading ? "Loading..." : "Search"}
@@ -82,9 +83,8 @@ const AirQuality = () => {
 
       {error && <p className="text-red-500">{error}</p>}
 
-      {aqiData && (
+      {aqiData ? (
         <>
-          {/* ⬇️ Container for PDF snapshot */}
           <div ref={exportRef} className="space-y-4">
             <div className="bg-white p-4 rounded shadow">
               <p><strong>City:</strong> {aqiData.city}</p>
@@ -115,15 +115,14 @@ const AirQuality = () => {
             </MapContainer>
           </div>
 
-          {/* ⬇️ Download button */}
           <button
             onClick={handleDownloadPDF}
-            className="bg-green-600 text-white px-4 py-2 rounded mt-4"
+            className="bg-green-600 text-black px-4 py-2 rounded mt-4"
           >
-            Download PDF
+            📄 Download PDF
           </button>
         </>
-      )}
+      ) : null}
     </div>
   );
 };

@@ -9,7 +9,7 @@ import {
   CartesianGrid,
 } from "recharts";
 
-const SeaLevelLineChart = forwardRef(({ refData }, ref) => {
+const SeaLevelLineChart = forwardRef(({ refData }, ) => {
   const [data, setData] = useState([]);
 
   useEffect(() => {
@@ -32,7 +32,12 @@ const SeaLevelLineChart = forwardRef(({ refData }, ref) => {
           <XAxis dataKey="year" />
           <YAxis unit=" mm" />
           <Tooltip />
-          <Line type="monotone" dataKey="level" stroke="#3b82f6" strokeWidth={2} />
+          <Line
+            type="monotone"
+            dataKey="level"
+            stroke="#3b82f6"
+            strokeWidth={2}
+          />
         </LineChart>
       </ResponsiveContainer>
     </div>

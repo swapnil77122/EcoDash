@@ -10,7 +10,7 @@ import {
 import Papa from "papaparse";
 import { useEffect, useState, useImperativeHandle, forwardRef } from "react";
 
-const EnergyComparisonChart = forwardRef(({ refData }, _) => {
+const EnergyComparisonChart = forwardRef(({ refData }, ) => {
   const [data, setData] = useState([]);
 
   useEffect(() => {

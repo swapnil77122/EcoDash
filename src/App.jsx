@@ -1,7 +1,8 @@
 // src/App.jsx
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import routes from "./routes";
-import Layout from "./components/layout/Layout"; // ✅ Use layout wrapper
+import Layout from "./components/layout/Layout";
+import React from "react"; // Required for createElement
 import "./index.css";
 
 const App = () => {
@@ -10,7 +11,7 @@ const App = () => {
       <Routes>
         <Route path="/" element={<Layout />}>
           {routes.map(({ path, Component }) => (
-            <Route key={path} path={path} element={<Component />} />
+            <Route key={path} path={path} element={React.createElement(Component)} />
           ))}
         </Route>
       </Routes>
