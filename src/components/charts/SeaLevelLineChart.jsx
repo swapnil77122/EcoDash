@@ -25,7 +25,7 @@ const SeaLevelLineChart = forwardRef(({ refData }, ref) => {
   useImperativeHandle(refData, () => data, [data]);
 
   return (
-    <div className="w-full h-80">
+    <div className="w-full h-80 mt-8">
       <ResponsiveContainer>
         <LineChart data={data}>
           <CartesianGrid strokeDasharray="3 3" />
