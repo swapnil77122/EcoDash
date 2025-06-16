@@ -38,8 +38,15 @@ const GlobalTempChart = () => {
       <ResponsiveContainer>
         <LineChart data={data}>
           <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="year" />
-          <YAxis unit="°C" />
+          <XAxis
+  dataKey="year"
+  tick={{ fill: '#000', fontSize: 12, fontWeight: 'bold' }} // darker year labels
+/>
+<YAxis
+  unit="°C"
+  tick={{ fill: '#000', fontSize: 12, fontWeight: 'bold' }} // darker Y-axis labels
+/>
+
           <Tooltip />
           <Line type="monotone" dataKey="temp" stroke="#ef4444" />
         </LineChart>

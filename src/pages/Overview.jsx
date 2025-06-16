@@ -31,9 +31,9 @@ const Overview = () => {
       <Card>
         <h1 className="text-2xl font-bold mb-2 text-white">🌍 Global Climate Insights Dashboard</h1>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-gray-600">
-          <p>🔺 Avg Temp: 1.1°C ↑</p>
-          <p>🟢 CO2: 417 ppm ↑</p>
-          <p>🟡 AQI: Moderate</p>
+          <p className="text-white">🔺 Avg Temp: 1.1°C ↑</p>
+          <p className="text-white ">🟢 CO2: 417 ppm ↑</p>
+          <p className="text-white">🟡 AQI: Moderate</p>
         </div>
       </Card>
 

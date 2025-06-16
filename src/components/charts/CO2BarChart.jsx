@@ -69,15 +69,22 @@ const CO2BarChart = () => {
       {data.length === 0 ? (
         <div className="text-center text-white">Loading data...</div>
       ) : (
-        <ResponsiveContainer width="100%" height={300}>
-          <BarChart data={data}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="country" />
-            <YAxis unit=" Mt" />
-            <Tooltip />
-            <Bar dataKey="co2" fill="#22c55e" />
-          </BarChart>
-        </ResponsiveContainer>
+      <ResponsiveContainer width="100%" height={300}>
+  <BarChart data={data}>
+    <CartesianGrid strokeDasharray="3 3" />
+    <XAxis
+      dataKey="country"
+      tick={{ fill: '#000', fontSize: 12, fontWeight: 'bold' }} // ⬅️ darker ticks
+    />
+    <YAxis
+      unit=" Mt"
+      tick={{ fill: '#000', fontSize: 12, fontWeight: 'bold' }} // ⬅️ darker ticks
+    />
+    <Tooltip />
+    <Bar dataKey="co2" fill="#22c55e" />
+  </BarChart>
+</ResponsiveContainer>
+
       )}
     </div>
   );

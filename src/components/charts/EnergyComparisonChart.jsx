@@ -58,8 +58,17 @@ const EnergyComparisonChart = forwardRef(({ refData }, ) => {
       </h3>
       <ResponsiveContainer width="100%" height={400}>
         <BarChart data={data}>
-          <XAxis dataKey="mode" angle={-40} textAnchor="end" height={100} />
-          <YAxis />
+          <XAxis
+  dataKey="mode"
+  angle={-40}
+  textAnchor="end"
+  height={100}
+  tick={{ fill: '#000', fontSize: 12, fontWeight: 'bold' }} // darker, bolder labels
+/>
+<YAxis
+  tick={{ fill: '#000', fontSize: 12, fontWeight: 'bold' }} // darker, bolder labels
+/>
+
           <Tooltip />
           <Legend />
           <Bar dataKey="Renewable" fill="#22c55e" />
