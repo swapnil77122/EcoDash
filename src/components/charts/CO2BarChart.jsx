@@ -74,11 +74,11 @@ const CO2BarChart = () => {
     <CartesianGrid strokeDasharray="3 3" />
     <XAxis
       dataKey="country"
-      tick={{ fill: '#000', fontSize: 12, fontWeight: 'bold' }} // ⬅️ darker ticks
+      tick={{ fill: '#fff', fontSize: 12, fontWeight: 'bold'  }} // ⬅️ darker ticks
     />
     <YAxis
       unit=" Mt"
-      tick={{ fill: '#000', fontSize: 12, fontWeight: 'bold' }} // ⬅️ darker ticks
+      tick={{ fill: '#fff', fontSize: 12, fontWeight: 'bold' }} // ⬅️ darker ticks
     />
     <Tooltip />
     <Bar dataKey="co2" fill="#22c55e" />

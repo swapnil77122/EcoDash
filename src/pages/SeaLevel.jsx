@@ -13,7 +13,7 @@ const SeaLevel = () => {
 
     const pdf = new jsPDF('portrait', 'mm', 'a4');
     pdf.setFontSize(16);
-    pdf.text('🌊 Global Sea Level Rise - Raw Data Report', 14, 20);
+    pdf.text(' Global Sea Level Rise - Raw Data Report', 14, 20);
 
     const rows = data.map(d => [d.year, d.level]);
 
