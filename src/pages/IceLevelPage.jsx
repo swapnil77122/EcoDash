@@ -54,6 +54,23 @@ const IceLevelPage = () => {
       ? data
       : data.filter((d) => d.Year === filteredYear);
 
+  // ✅ Custom tooltip to show Day on hover
+  const CustomTooltip = ({ active, payload, label }) => {
+    if (active && payload && payload.length) {
+      return (
+        <div className="bg-white p-2 rounded shadow text-black text-sm">
+          <p className="font-semibold">📅 Date: {label}</p>
+          {payload.map((entry, i) => (
+            <p key={i} style={{ color: entry.color }}>
+              {entry.name}: {entry.value.toLocaleString()} Gt
+            </p>
+          ))}
+        </div>
+      );
+    }
+    return null;
+  };
+
   return (
     <div className="w-full min-h-screen bg-gray-800 text-white p-6">
       <h2 className="text-2xl font-bold mb-6 text-white">
@@ -82,7 +99,7 @@ const IceLevelPage = () => {
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="Day" stroke="#000" />
             <YAxis unit=" Gt" stroke="#000" />
-            <Tooltip />
+            <Tooltip content={<CustomTooltip />} /> {/* 👈 Updated */}
             <Legend />
             <Line
               type="monotone"
@@ -110,3 +127,4 @@ const IceLevelPage = () => {
 };
 
 export default IceLevelPage;
+
