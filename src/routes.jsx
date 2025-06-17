@@ -9,13 +9,14 @@ import Disasters from "./pages/Disasters";
 import Energy from "./pages/Energy";
 import About from "./pages/About";
 import NotFound from "./pages/NotFound";
-
+import IceLevelPage from "./pages/IceLevelPage";
 const routes = [
   { path: "/", Component: Overview },
   { path: "/emissions", Component: Emissions },
   { path: "/air-quality", Component: AirQuality },
   { path: "/sea-level", Component: SeaLevel },
   { path: "/forest-loss", Component: ForestLoss },
+   { path: "ice-level", Component: IceLevelPage },
   { path: "/disasters", Component: Disasters },
   { path: "/energy", Component: Energy },
   { path: "/about", Component: About },

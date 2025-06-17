@@ -1,0 +1,110 @@
+import { useEffect, useState } from "react";
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  Legend,
+} from "recharts";
+import Papa from "papaparse";
+
+const IceLevelPage = () => {
+  const [data, setData] = useState([]);
+  const [filteredYear, setFilteredYear] = useState("All");
+
+  useEffect(() => {
+    fetch("/data/ice_level.csv")
+      .then((res) => res.text())
+      .then((text) => {
+        const parsed = Papa.parse(text, { header: true }).data;
+
+        // Build a map of date → { Day, Year, Antarctica, Greenland }
+        const dataMap = {};
+
+        parsed.forEach((d) => {
+          const day = d.Day;
+          const entity = d.Entity;
+          const value = parseFloat(
+            d["Cumulative change in mass in the ice sheets, according to NASA/JPL"]
+          );
+          const year = day?.split("-")[0];
+
+          if (!day || !entity || isNaN(value)) return;
+
+          if (!dataMap[day]) {
+            dataMap[day] = { Day: day, Year: year };
+          }
+          dataMap[day][entity] = value;
+        });
+
+        const mergedData = Object.values(dataMap).sort(
+          (a, b) => new Date(a.Day) - new Date(b.Day)
+        );
+
+        setData(mergedData);
+      });
+  }, []);
+
+  const years = Array.from(new Set(data.map((d) => d.Year))).sort();
+
+  const filteredData =
+    filteredYear === "All"
+      ? data
+      : data.filter((d) => d.Year === filteredYear);
+
+  return (
+    <div className="bg-white p-4 rounded shadow mt-8">
+      <h2 className="text-xl font-bold mb-4">🧊 Ice Sheet Mass Change</h2>
+
+      <div className="mb-4">
+        <label className="font-medium mr-2">Filter by Year:</label>
+        <select
+          value={filteredYear}
+          onChange={(e) => setFilteredYear(e.target.value)}
+          className="border px-2 py-1 rounded"
+        >
+          <option value="All">All</option>
+          {years.map((year) => (
+            <option key={year} value={year}>
+              {year}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      <ResponsiveContainer width="100%" height={400}>
+        <LineChart data={filteredData}>
+          <CartesianGrid strokeDasharray="3 3" />
+          <XAxis dataKey="Day" stroke="#000" />
+          <YAxis unit=" Gt" stroke="#000" />
+          <Tooltip />
+          <Legend />
+
+          <Line
+            type="monotone"
+            dataKey="Antarctica"
+            name="Antarctica"
+            stroke="#3b82f6"
+            strokeWidth={2}
+            dot={{ r: 3 }}
+            activeDot={{ r: 5 }}
+          />
+          <Line
+            type="monotone"
+            dataKey="Greenland"
+            name="Greenland"
+            stroke="#10b981"
+            strokeWidth={2}
+            dot={{ r: 3 }}
+            activeDot={{ r: 5 }}
+          />
+        </LineChart>
+      </ResponsiveContainer>
+    </div>
+  );
+};
+
+export default IceLevelPage;
