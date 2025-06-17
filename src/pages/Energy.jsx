@@ -3,19 +3,10 @@ import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import html2canvas from "html2canvas";
 import EnergyComparisonChart from "../components/charts/EnergyComparisonChart";
-import {
-  ResponsiveContainer,
-  ScatterChart,
-  Scatter,
-  XAxis,
-  YAxis,
-  Tooltip,
-  Legend,
-} from "recharts";
 
 const Energy = () => {
   const chartRef = useRef();
-  const pcaChartRef = useRef();
+  const pcaChartRef = useRef(); // Can keep or remove if not reused
   const dataRef = useRef();
   const [pcaData, setPcaData] = useState([]);
 
@@ -36,7 +27,6 @@ const Energy = () => {
     pdf.setFontSize(16);
     pdf.text("⚡ Energy Overview Report", 14, 20);
 
-    // 🖼️ Snapshot of bar chart
     const canvas = await html2canvas(chartElement, {
       useCORS: true,
       scale: 2,
@@ -44,17 +34,8 @@ const Energy = () => {
     const imgData = canvas.toDataURL("image/png");
     pdf.addImage(imgData, "PNG", 10, 30, 270, 80);
 
-    // 📉 Snapshot of PCA chart
-    if (pcaElement) {
-      const canvas2 = await html2canvas(pcaElement, {
-        useCORS: true,
-        scale: 2,
-      });
-      const imgData2 = canvas2.toDataURL("image/png");
-      pdf.addImage(imgData2, "PNG", 10, 115, 270, 80);
-    }
+    // Optional: PCA snapshot block removed/commented
 
-    // 📊 Raw Data Table
     const rows = data.map((d) => [d.mode, d.Renewable, d.NonRenewable]);
 
     autoTable(pdf, {
@@ -85,42 +66,6 @@ const Energy = () => {
         <EnergyComparisonChart refData={dataRef} />
       </div>
 
-      {/* PCA Chart */}
-      <div ref={pcaChartRef} className="bg-white p-4 rounded shadow">
-        <h3 className="text-lg font-bold mb-4">
-          📉 PCA Comparison: Renewable vs Non-Renewable
-        </h3>
-        {pcaData.length > 0 && (
-          <ResponsiveContainer width="100%" height={400}>
-            <ScatterChart>
-              <XAxis
-                type="number"
-                dataKey="PC1"
-                name="Principal Component 1"
-                tick={{ fill: "#000", fontSize: 12, fontWeight: "bold" }}
-              />
-              <YAxis
-                type="number"
-                dataKey="PC2"
-                name="Principal Component 2"
-                tick={{ fill: "#000", fontSize: 12, fontWeight: "bold" }}
-              />
-              <Tooltip cursor={{ strokeDasharray: "3 3" }} />
-              <Legend />
-              <Scatter
-                name="Renewable"
-                data={pcaData.filter((d) => d.type === "Renewable")}
-                fill="#22c55e"
-              />
-              <Scatter
-                name="Non-Renewable"
-                data={pcaData.filter((d) => d.type === "Non-Renewable")}
-                fill="#ef4444"
-              />
-            </ScatterChart>
-          </ResponsiveContainer>
-        )}
-      </div>
     </div>
   );
 };
