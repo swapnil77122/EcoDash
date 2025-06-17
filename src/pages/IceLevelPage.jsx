@@ -21,7 +21,6 @@ const IceLevelPage = () => {
       .then((text) => {
         const parsed = Papa.parse(text, { header: true }).data;
 
-        // Build a map of date → { Day, Year, Antarctica, Greenland }
         const dataMap = {};
 
         parsed.forEach((d) => {
@@ -56,10 +55,10 @@ const IceLevelPage = () => {
       : data.filter((d) => d.Year === filteredYear);
 
   return (
-    <div className="bg-white p-4 rounded shadow mt-8">
-      <h2 className="text-xl font-bold mb-4">🧊 Ice Sheet Mass Change</h2>
+    <div className="w-full min-h-screen bg-white p-6">
+      <h2 className="text-2xl font-bold mb-6">🧊 Ice Sheet Mass Change</h2>
 
-      <div className="mb-4">
+      <div className="mb-6">
         <label className="font-medium mr-2">Filter by Year:</label>
         <select
           value={filteredYear}
@@ -75,34 +74,35 @@ const IceLevelPage = () => {
         </select>
       </div>
 
-      <ResponsiveContainer width="100%" height={400}>
-        <LineChart data={filteredData}>
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="Day" stroke="#000" />
-          <YAxis unit=" Gt" stroke="#000" />
-          <Tooltip />
-          <Legend />
-
-          <Line
-            type="monotone"
-            dataKey="Antarctica"
-            name="Antarctica"
-            stroke="#3b82f6"
-            strokeWidth={2}
-            dot={{ r: 3 }}
-            activeDot={{ r: 5 }}
-          />
-          <Line
-            type="monotone"
-            dataKey="Greenland"
-            name="Greenland"
-            stroke="#10b981"
-            strokeWidth={2}
-            dot={{ r: 3 }}
-            activeDot={{ r: 5 }}
-          />
-        </LineChart>
-      </ResponsiveContainer>
+      <div className="h-[75vh]">
+        <ResponsiveContainer width="100%" height="100%">
+          <LineChart data={filteredData}>
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="Day" stroke="#000" />
+            <YAxis unit=" Gt" stroke="#000" />
+            <Tooltip />
+            <Legend />
+            <Line
+              type="monotone"
+              dataKey="Antarctica"
+              name="Antarctica"
+              stroke="#3b82f6"
+              strokeWidth={2}
+              dot={{ r: 3 }}
+              activeDot={{ r: 5 }}
+            />
+            <Line
+              type="monotone"
+              dataKey="Greenland"
+              name="Greenland"
+              stroke="#10b981"
+              strokeWidth={2}
+              dot={{ r: 3 }}
+              activeDot={{ r: 5 }}
+            />
+          </LineChart>
+        </ResponsiveContainer>
+      </div>
     </div>
   );
 };
