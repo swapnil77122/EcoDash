@@ -19,7 +19,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
   return (
     <aside
       className={`
-        fixed top-0 left-0 h-full w-64 bg-white dark:bg-gray-900 shadow-lg z-50 transform transition-transform duration-300
+        fixed top-0 left-0 h-full w-64 bg-white shadow-lg z-50 transform transition-transform duration-300
         ${isOpen ? "translate-x-0" : "-translate-x-full"}
         md:translate-x-0 md:static md:block
       `}
@@ -27,10 +27,9 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
       <div className="p-5">
         <div className="flex items-center justify-between mb-8">
           <div className="flex items-center gap-2">
-            {/* ☰ Symbol as Toggle Button (hidden on desktop) */}
             <button
               onClick={() => setIsOpen(false)}
-              className="text-2xl text-gray-700 dark:text-white md:hidden"
+              className="text-2xl text-gray-700 md:hidden"
             >
               ☰
             </button>
@@ -44,13 +43,13 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
               key={name}
               to={path}
               className={({ isActive }) =>
-                `flex items-center gap-3 px-4 py-2 rounded-lg font-medium transition ${
+                `flex items-center gap-3 px-4 py-2 rounded-lg font-bold transition ${
                   isActive
-                    ? "bg-blue-100 dark:bg-blue-800 text-blue-700 dark:text-white"
-                    : "text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 text-white"
+                    ? "bg-blue-800 text-white hover:bg-blue-800"
+                    : "text-black hover:bg-blue-500"
                 }`
               }
-              onClick={() => setIsOpen(false)} // Auto-close on mobile
+              onClick={() => setIsOpen(false)}
             >
               {icon}
               {name}

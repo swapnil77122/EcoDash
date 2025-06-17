@@ -34,8 +34,6 @@ const Energy = () => {
     const imgData = canvas.toDataURL("image/png");
     pdf.addImage(imgData, "PNG", 10, 30, 270, 80);
 
-    // Optional: PCA snapshot block removed/commented
-
     const rows = data.map((d) => [d.mode, d.Renewable, d.NonRenewable]);
 
     autoTable(pdf, {
@@ -50,9 +48,9 @@ const Energy = () => {
   };
 
   return (
-    <div className="p-4 space-y-6">
+    <div className="p-4 space-y-6 bg-white text-black min-h-screen">
       <div className="flex justify-between items-center">
-        <h2 className="text-white text-xl font-bold">⚡ Energy Overview</h2>
+        <h2 className="text-xl font-bold">⚡ Energy Overview</h2>
         <button
           onClick={handleDownloadPDF}
           className="bg-blue-600 text-white px-4 py-2 rounded"
@@ -65,7 +63,6 @@ const Energy = () => {
       <div ref={chartRef}>
         <EnergyComparisonChart refData={dataRef} />
       </div>
-
     </div>
   );
 };

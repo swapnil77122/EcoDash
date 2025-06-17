@@ -26,11 +26,11 @@ const Overview = () => {
   };
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="p-6 space-y-6 bg-white text-black">
       {/* 🔹 Header */}
       <Card>
-        <h1 className="text-2xl font-bold mb-2 text-white">🌍 Global Climate Insights Dashboard</h1>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-white">
+        <h1 className="text-2xl font-bold mb-2 text-black">🌍 Global Climate Insights Dashboard</h1>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-gray-700">
           <p>🔺 Avg Temp: 1.1°C ↑</p>
           <p>🟢 CO2: 417 ppm ↑</p>
           <p>🟡 AQI: Moderate</p>
@@ -40,36 +40,36 @@ const Overview = () => {
       {/* 🔹 2-Column Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <Card>
-          <h2 className="text-xl font-semibold mb-4 text-white">📈 Global Temperature Over Time</h2>
+          <h2 className="text-xl font-semibold mb-4 text-black">📈 Global Temperature Over Time</h2>
           <GlobalTempChart />
         </Card>
 
         <Card>
-          <h2 className="text-xl font-semibold mb-4 text-white">🌍 Top Emitters</h2>
+          <h2 className="text-xl font-semibold mb-4 text-black">🌍 Top Emitters</h2>
           <CO2BarChart />
         </Card>
 
         <Card>
-          <h2 className="text-xl font-semibold mb-4 text-white">🗺️ CO2 Emissions by Country in map</h2>
+          <h2 className="text-xl font-semibold mb-4 text-black">🗺️ CO2 Emissions by Country in Map</h2>
           {loading ? (
-            <p className="text-white">Loading CO₂ map data...</p>
+            <p className="text-gray-700">Loading CO₂ map data...</p>
           ) : geoData ? (
             <CO2Map data={geoData} />
           ) : (
-            <p className="text-red-500 text-white">Failed to load CO₂ map data.</p>
+            <p className="text-red-600">Failed to load CO₂ map data.</p>
           )}
         </Card>
 
         {/* AQI Search */}
         <Card>
-          <h2 className="text-xl font-semibold mb-4 text-white">🌫️ Live AQI by City</h2>
+          <h2 className="text-xl font-semibold mb-4 text-black">🌫️ Live AQI by City</h2>
           <div className="flex flex-col md:flex-row md:items-center gap-4 mb-4">
             <input
               type="text"
               value={city}
               onChange={(e) => setCity(e.target.value)}
               placeholder="Enter city name"
-              className="border border-gray-300 px-4 py-2 rounded-md w-full md:w-2/3 focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className="border border-gray-400 px-4 py-2 rounded-md w-full md:w-2/3 focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
             />
             <button
               onClick={handleAQISearch}

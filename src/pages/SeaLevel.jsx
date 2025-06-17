@@ -13,7 +13,7 @@ const SeaLevel = () => {
 
     const pdf = new jsPDF('portrait', 'mm', 'a4');
     pdf.setFontSize(16);
-    pdf.text(' Global Sea Level Rise - Raw Data Report', 14, 20);
+    pdf.text('Global Sea Level Rise - Raw Data Report', 14, 20);
 
     const rows = data.map(d => [d.year, d.level]);
 
@@ -29,19 +29,19 @@ const SeaLevel = () => {
   };
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="p-6 space-y-6 bg-white text-black">
       <Card>
-        <h1 className="text-2xl font-bold text-white">🌊 Global Sea Level Rise</h1>
-        <p className="text-gray-600 text-sm text-white">
+        <h1 className="text-2xl font-bold text-black">🌊 Global Sea Level Rise</h1>
+        <p className="text-gray-700 text-sm">
           Observe sea level changes over time from NOAA data.
         </p>
       </Card>
 
       <div className="flex justify-between items-center">
-        <h2 className="text-xl font-semibold text-white">📉 Sea Level Trends</h2>
+        <h2 className="text-xl font-semibold text-black">📉 Sea Level Trends</h2>
         <button
           onClick={handleDownloadPDF}
-          className="bg-blue-600 text-white px-4 py-2 rounded text-white"
+          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
         >
           📄 Download Raw Data
         </button>

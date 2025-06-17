@@ -58,23 +58,20 @@ const AirQuality = () => {
   };
 
   return (
-<div className="min-h-screen p-4 bg-gray-800 text-black">
-      <h2 className="text-white text-2xl font-bold mb-4">
-  🌍 Global Air Quality
-</h2>
-
+    <div className="min-h-screen p-4 bg-white text-black">
+      <h2 className="text-2xl font-bold mb-4">🌍 Global Air Quality</h2>
 
       <div className="flex gap-2 mb-4">
         <input
           type="text"
-          placeholder="Enter city name "
+          placeholder="Enter city name"
           value={city}
           onChange={(e) => setCity(e.target.value)}
           className="p-2 border border-gray-300 rounded w-full"
         />
         <button
           onClick={handleSearch}
-          className="px-4 py-2 bg-blue-600 text-black rounded"
+          className="px-4 py-2 bg-blue-600 text-white rounded"
           disabled={loading}
         >
           {loading ? "Loading..." : "Search"}
@@ -86,7 +83,7 @@ const AirQuality = () => {
       {aqiData ? (
         <>
           <div ref={exportRef} className="space-y-4">
-            <div className="bg-white p-4 rounded shadow">
+            <div className="bg-white p-4 rounded shadow border border-gray-200">
               <p><strong>City:</strong> {aqiData.city}</p>
               <p><strong>AQI:</strong> {aqiData.aqi}</p>
               <p><strong>Main Pollutant:</strong> {aqiData.category}</p>
@@ -117,7 +114,7 @@ const AirQuality = () => {
 
           <button
             onClick={handleDownloadPDF}
-            className="bg-green-600 text-black px-4 py-2 rounded mt-4"
+            className="bg-blue-600 text-white px-4 py-2 rounded mt-4"
           >
             📄 Download PDF
           </button>

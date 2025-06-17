@@ -1,4 +1,3 @@
-// src/components/charts/CO2BarChart.jsx
 import { useEffect, useState } from 'react';
 import {
   BarChart,
@@ -12,29 +11,11 @@ import {
 
 const CSV_URL = 'https://raw.githubusercontent.com/owid/co2-data/master/owid-co2-data.csv';
 const TARGET_COUNTRIES = [
-  'China',
-  'United States',
-  'India',
-  'Russia',
-  'Japan',
-  'Germany',
-  'Iran',
-  'South Korea',
-  'Indonesia',
-  'Saudi Arabia',
-  'Canada',
-  'Mexico',
-  'Brazil',
-  'South Africa',
-  'Australia',
-  'United Kingdom',
-  'Turkey',
-  'Italy',
-  'France',
-  'Thailand'
+  'China', 'United States', 'India', 'Russia', 'Japan', 'Germany', 'Iran',
+  'South Korea', 'Indonesia', 'Saudi Arabia', 'Canada', 'Mexico', 'Brazil',
+  'South Africa', 'Australia', 'United Kingdom', 'Turkey', 'Italy', 'France', 'Thailand'
 ];
-
-const AVAILABLE_YEARS = ['2021', '2020', '2019', '2018', '2017']; // Add more if needed
+const AVAILABLE_YEARS = ['2021', '2020', '2019', '2018', '2017'];
 
 const CO2BarChart = () => {
   const [data, setData] = useState([]);
@@ -74,9 +55,9 @@ const CO2BarChart = () => {
   }, [year, rawData]);
 
   return (
-    <div className="w-full mt-8">
+    <div className="w-full mt-8 bg-white p-4 rounded shadow text-black">
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-lg font-semibold text-white"></h2>
+        <h2 className="text-lg font-semibold">Top CO₂ Emitters in {year}</h2>
         <select
           value={year}
           onChange={e => setYear(e.target.value)}
@@ -89,24 +70,23 @@ const CO2BarChart = () => {
       </div>
 
       {data.length === 0 ? (
-        <div className="text-center text-white">Loading data...</div>
+        <div className="text-center text-gray-600">Loading data...</div>
       ) : (
-      <ResponsiveContainer width="100%" height={300}>
-  <BarChart data={data}>
-    <CartesianGrid strokeDasharray="3 3" />
-    <XAxis
-      dataKey="country"
-      tick={{ fill: '#fff', fontSize: 12, fontWeight: 'bold'  }} // ⬅️ darker ticks
-    />
-    <YAxis
-      unit=" Mt"
-      tick={{ fill: '#fff', fontSize: 12, fontWeight: 'bold' }} // ⬅️ darker ticks
-    />
-    <Tooltip />
-    <Bar dataKey="co2" fill="#22c55e" />
-  </BarChart>
-</ResponsiveContainer>
-
+        <ResponsiveContainer width="100%" height={300}>
+          <BarChart data={data}>
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis
+              dataKey="country"
+              tick={{ fill: '#000', fontSize: 12, fontWeight: 'bold' }}
+            />
+            <YAxis
+              unit=" Mt"
+              tick={{ fill: '#000', fontSize: 12, fontWeight: 'bold' }}
+            />
+            <Tooltip />
+            <Bar dataKey="co2" fill="#22c55e" />
+          </BarChart>
+        </ResponsiveContainer>
       )}
     </div>
   );

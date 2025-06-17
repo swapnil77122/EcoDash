@@ -1,6 +1,13 @@
-// src/components/charts/GlobalTempChart.jsx
 import { useEffect, useState } from 'react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer
+} from 'recharts';
 
 const CSV_URL = 'https://raw.githubusercontent.com/owid/co2-data/master/owid-co2-data.csv';
 
@@ -23,7 +30,7 @@ const GlobalTempChart = () => {
           .slice(-50) // last 50 years
           .map(cols => ({
             year: +cols[idxYear],
-            temp: +cols[idxTemp] * 1e-3 + 14 // simulate around 14°C
+            temp: +cols[idxTemp] * 1e-3 + 14 // simulate temp around 14°C
           }));
 
         setData(global);
@@ -31,24 +38,24 @@ const GlobalTempChart = () => {
       .catch(console.error);
   }, []);
 
-  if (!data.length) return <div className="text-center">Loading temperature...</div>;
+  if (!data.length) return <div className="text-center text-black">Loading temperature...</div>;
 
   return (
-    <div className="w-full h-80">
-      <ResponsiveContainer>
+    <div className="bg-white p-6 rounded-2xl shadow text-black">
+      <h3 className="text-xl font-bold mb-4">🌡️ Simulated Global Temperature Trend</h3>
+      <ResponsiveContainer width="100%" height={400}>
         <LineChart data={data}>
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis
-  dataKey="year"
-  tick={{ fill: '#fff', fontSize: 12, fontWeight: 'bold' }} // darker year labels
-/>
-<YAxis
-  unit="°C"
-  tick={{ fill: '#fff', fontSize: 12, fontWeight: 'bold' }} // darker Y-axis labels
-/>
-
+            dataKey="year"
+            tick={{ fill: '#000', fontSize: 12, fontWeight: 'bold' }}
+          />
+          <YAxis
+            unit="°C"
+            tick={{ fill: '#000', fontSize: 12, fontWeight: 'bold' }}
+          />
           <Tooltip />
-          <Line type="monotone" dataKey="temp" stroke="#ef4444" />
+          <Line type="monotone" dataKey="temp" stroke="#ef4444" strokeWidth={2} />
         </LineChart>
       </ResponsiveContainer>
     </div>

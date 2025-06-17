@@ -9,7 +9,7 @@ import {
   CartesianGrid,
 } from "recharts";
 
-const SeaLevelLineChart = forwardRef(({ refData }, ) => {
+const SeaLevelLineChart = forwardRef(({ refData }, ref) => {
   const [data, setData] = useState([]);
 
   useEffect(() => {
@@ -21,21 +21,21 @@ const SeaLevelLineChart = forwardRef(({ refData }, ) => {
     setData(fakeData);
   }, []);
 
-  // Expose the data to parent via ref
   useImperativeHandle(refData, () => data, [data]);
 
   return (
-    <div className="w-full h-80 mt-8">
-      <ResponsiveContainer>
+    <div className="bg-white p-6 rounded-2xl shadow text-black">
+      <h3 className="text-lg font-bold mb-4">📈 Simulated Sea Level Rise (mm/year)</h3>
+      <ResponsiveContainer width="100%" height={400}>
         <LineChart data={data}>
           <CartesianGrid strokeDasharray="3 3" />
-           <XAxis
+          <XAxis
             dataKey="year"
-            tick={{ fill: "white", fontWeight: "bold" }}
+            tick={{ fill: "#000", fontWeight: "bold", fontSize: 12 }}
           />
           <YAxis
             unit=" mm"
-            tick={{ fill: "white", fontWeight: "bold" }}
+            tick={{ fill: "#000", fontWeight: "bold", fontSize: 12 }}
           />
           <Tooltip />
           <Line
@@ -43,6 +43,7 @@ const SeaLevelLineChart = forwardRef(({ refData }, ) => {
             dataKey="level"
             stroke="#3b82f6"
             strokeWidth={2}
+            dot={{ r: 2 }}
           />
         </LineChart>
       </ResponsiveContainer>

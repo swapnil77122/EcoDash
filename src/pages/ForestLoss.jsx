@@ -53,15 +53,15 @@ const ForestLoss = () => {
   }, [allData, selectedYear]);
 
   return (
-    <div className="p-4">
-      <h2 className="text-xl font-bold text-white mb-4">
+    <div className="p-4 bg-white text-black min-h-screen">
+      <h2 className="text-xl font-bold mb-4">
         🌳 Forest Area Loss ({selectedYear})
       </h2>
 
       <div className="mb-4">
-        <label className="text-white font-medium mr-2">Select Year:</label>
+        <label className="font-medium mr-2">Select Year:</label>
         <select
-          className="p-2 rounded shadow"
+          className="p-2 rounded shadow border border-black"
           value={selectedYear}
           onChange={(e) => setSelectedYear(parseInt(e.target.value))}
         >
@@ -74,30 +74,42 @@ const ForestLoss = () => {
       </div>
 
       {chartData.length === 0 ? (
-        <p className="text-white">Loading or no valid data found...</p>
+        <p>Loading or no valid data found...</p>
       ) : (
         <div className="bg-white p-4 rounded shadow">
           <ResponsiveContainer width="100%" height={500}>
-        <BarChart data={chartData} layout="vertical" margin={{ left: 100 }}>
-  <CartesianGrid strokeDasharray="3 3" />
+  <BarChart data={chartData} margin={{ top: 20, right: 30, left: 40, bottom: 100 }}>
+    <CartesianGrid strokeDasharray="3 3" />
 
-  <XAxis
-    type="number"
-    tick={{ fill: '#000', fontWeight: 'bold' }} // <-- Make X-axis ticks bold and black
-  />
+    <XAxis
+      dataKey="country"
+      type="category"
+      interval={0}
+      tick={{ fill: '#000', fontWeight: 'bold', angle: -35, textAnchor: 'end' }}
+      height={80}
+    />
 
-  <YAxis
-    type="category"
-    dataKey="country"
-    tick={{ fill: '#000', fontWeight: 'bold' }} // <-- Make Y-axis ticks bold and black
-  />
+<YAxis
+  type="number"
+  tick={{ fill: '#000', fontWeight: 'bold' }}
+  label={{
+    value: 'Forest Loss (ha)',
+    angle: -90,
+    position: 'insideLeft',
+    dx: -40, // moved further left
+    fill: '#000',
+    fontWeight: 'bold',
+  }}
+/>
 
-  <Tooltip />
-  <Legend />
-  <Bar dataKey="loss" fill="#228B22" />
-</BarChart>
 
-          </ResponsiveContainer>
+
+    <Tooltip />
+    <Legend />
+    <Bar dataKey="loss" fill="#228B22" />
+  </BarChart>
+</ResponsiveContainer>
+
         </div>
       )}
     </div>

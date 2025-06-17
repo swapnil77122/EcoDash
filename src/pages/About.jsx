@@ -2,7 +2,7 @@ import { Card, CardContent } from "../components/ui/Card";
 
 const About = () => {
   return (
-    <div className="p-8 space-y-10 text-gray-800">
+    <div className="p-8 space-y-10 bg-white text-gray-800">
       <header className="text-center">
         <h1 className="text-4xl font-bold text-blue-700 mb-2">🌐 About the Environmental Dashboard</h1>
         <p className="text-lg text-gray-600">
@@ -11,7 +11,7 @@ const About = () => {
       </header>
 
       <section className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <Card className="bg-blue-50 border-blue-200">
+        <Card className="bg-white border border-blue-200">
           <CardContent className="p-6">
             <h2 className="text-2xl font-semibold text-blue-700 mb-3">📊 Dashboard Purpose</h2>
             <p>
@@ -21,7 +21,7 @@ const About = () => {
           </CardContent>
         </Card>
 
-        <Card className="bg-green-50 border-green-200">
+        <Card className="bg-white border border-green-200">
           <CardContent className="p-6">
             <h2 className="text-2xl font-semibold text-green-700 mb-3">🧩 Key Features</h2>
             <ul className="list-disc list-inside space-y-1">
@@ -33,7 +33,7 @@ const About = () => {
           </CardContent>
         </Card>
 
-        <Card className="bg-purple-50 border-purple-200">
+        <Card className="bg-white border border-purple-200">
           <CardContent className="p-6">
             <h2 className="text-2xl font-semibold text-purple-700 mb-3">🛠️ Technology Stack</h2>
             <ul className="list-disc list-inside space-y-1">
@@ -46,7 +46,7 @@ const About = () => {
           </CardContent>
         </Card>
 
-        <Card className="bg-yellow-50 border-yellow-200">
+        <Card className="bg-white border border-yellow-200">
           <CardContent className="p-6">
             <h2 className="text-2xl font-semibold text-yellow-700 mb-3">👤 Intended Users</h2>
             <ul className="list-disc list-inside space-y-1">
@@ -59,7 +59,7 @@ const About = () => {
         </Card>
       </section>
 
-      <Card className="bg-gray-50 border-gray-200">
+      <Card className="bg-white border border-gray-200">
         <CardContent className="p-6">
           <h2 className="text-2xl font-semibold text-gray-700 mb-3">🌍 Real-World Impact</h2>
           <p>
