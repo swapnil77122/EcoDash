@@ -78,7 +78,7 @@ const DisasterMap = () => {
 
   return (
     <div>
-      <div className="flex flex-wrap gap-2 mb-4 text-white">
+      <div className="flex flex-wrap  mb-4 text-white">
         <div>
           <label className="mr-2">Year:</label>
           <select
