@@ -1,103 +1,94 @@
-import { MapContainer, TileLayer, GeoJSON, Tooltip } from 'react-leaflet';
-import 'leaflet/dist/leaflet.css';
 import { useEffect, useState } from 'react';
+import Papa from 'papaparse';
+import {
+  BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, Legend
+} from 'recharts';
+
+const years = Array.from({ length: 11 }, (_, i) => 2010 + i); // [2010, ..., 2020]
 
 const ForestLoss = () => {
-  const [geoData, setGeoData] = useState(null);
-  const [error, setError] = useState(null);
+  const [allData, setAllData] = useState([]);
+  const [selectedYear, setSelectedYear] = useState(2020);
+  const [chartData, setChartData] = useState([]);
 
   useEffect(() => {
-    fetch('/data/glad_alerts_loss.geojson')
-      .then((res) => {
-        if (!res.ok) throw new Error('Failed to load GeoJSON');
-        return res.json();
-      })
-      .then((data) => setGeoData(data))
-      .catch((err) => setError(err.message));
+    const loadData = async () => {
+      const res = await fetch('/data/forest_loss_all.csv');
+      const csvText = await res.text();
+      const parsed = Papa.parse(csvText, { header: true, skipEmptyLines: true }).data;
+
+      const cleaned = parsed
+        .map(row => {
+          const entry = {
+            country: row.country?.trim(),
+            threshold: row.threshold?.trim(),
+          };
+          for (let year of years) {
+            const key = `tc_loss_ha_${year}`;
+            entry[year] = parseFloat(row[key]?.trim()) || 0;
+          }
+          return entry;
+        })
+        .filter(d => d.threshold === '30');
+
+      setAllData(cleaned);
+    };
+
+    loadData();
   }, []);
 
-  const onEachFeature = (feature, layer) => {
-    const props = feature.properties;
+  useEffect(() => {
+    if (allData.length > 0) {
+      const filtered = allData
+        .map(row => ({
+          country: row.country,
+          loss: row[selectedYear],
+        }))
+        .filter(d => !isNaN(d.loss))
+        .sort((a, b) => b.loss - a.loss)
+        .slice(0, 20);
 
-    const defaultStyle = {
-      color: 'red',
-      weight: 1,
-      fillOpacity: 0.3,
-    };
-
-    const highlightStyle = {
-      color: 'orange',
-      weight: 2,
-      fillOpacity: 0.6,
-    };
-
-    layer.setStyle(defaultStyle);
-
-    layer.on({
-      mouseover: (e) => {
-        e.target.setStyle(highlightStyle);
-        e.target.openTooltip();
-        e.target.bringToFront();
-      },
-      mouseout: (e) => {
-        e.target.setStyle(defaultStyle);
-        e.target.closeTooltip();
-      },
-    });
-
-    // Attach a tooltip to each layer
-    const tooltipContent = `
-      <div style="font-size: 12px;">
-        <strong>🌲 Forest Alert Region</strong><br/>
-        <ul style="padding-left: 1rem; margin: 0;">
-          <li>📅 2015: <a href="${props.data_2015}" target="_blank">View</a></li>
-          <li>📅 2016: <a href="${props.data_2016}" target="_blank">View</a></li>
-          <li>📅 2017: <a href="${props.data_2017}" target="_blank">View</a></li>
-          <li>📅 2018: <a href="${props.data_2018}" target="_blank">View</a></li>
-        </ul>
-      </div>
-    `;
-    layer.bindTooltip(tooltipContent, {
-      sticky: true,
-      direction: 'top',
-      opacity: 0.9,
-    });
-  };
+      setChartData(filtered);
+    }
+  }, [allData, selectedYear]);
 
   return (
     <div className="p-4">
-      <h2 className="text-xl text-white font-bold mb-4">🌲 Forest Loss (GLAD Alerts)</h2>
+      <h2 className="text-xl font-bold text-white mb-4">
+        🌳 Top 20 Countries by Forest Loss ({selectedYear}) (Threshold 30%)
+      </h2>
 
-      {error && (
-        <div className="text-red-600 font-semibold mb-2">
-          Error loading map: {error}
+      <div className="mb-4">
+        <label className="text-white font-medium mr-2">Select Year:</label>
+        <select
+          className="p-2 rounded shadow"
+          value={selectedYear}
+          onChange={(e) => setSelectedYear(parseInt(e.target.value))}
+        >
+          {years.map((y) => (
+            <option key={y} value={y}>
+              {y}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      {chartData.length === 0 ? (
+        <p className="text-white">Loading or no valid data found...</p>
+      ) : (
+        <div className="bg-white p-4 rounded shadow">
+          <ResponsiveContainer width="100%" height={500}>
+            <BarChart data={chartData} layout="vertical" margin={{ left: 100 }}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis type="number" label={{ value: 'Loss (ha)', position: 'insideBottom', offset: -5 }} />
+              <YAxis type="category" dataKey="country" />
+              <Tooltip />
+              <Legend />
+              <Bar dataKey="loss" fill="#228B22" name={`Loss in ${selectedYear} (ha)`} />
+            </BarChart>
+          </ResponsiveContainer>
         </div>
       )}
-
-      <div className="mb-4 bg-white text-sm p-3 rounded shadow max-w-xl">
-        <strong>Legend:</strong>
-        <ul className="list-disc pl-5">
-          <li><span className="text-red-600 font-bold">Red areas</span> indicate forest loss alerts.</li>
-          <li>Hover to view info and dataset links (2015–2018).</li>
-        </ul>
-      </div>
-
-      <div className="h-[80vh] w-full rounded overflow-hidden shadow">
-        <MapContainer
-          center={[0, 20]}
-          zoom={3}
-          scrollWheelZoom={true}
-          className="h-full w-full z-0"
-        >
-          <TileLayer
-            attribution='&copy; <a href="https://osm.org/copyright">OpenStreetMap</a>'
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          />
-          {geoData && (
-            <GeoJSON data={geoData} onEachFeature={onEachFeature} />
-          )}
-        </MapContainer>
-      </div>
     </div>
   );
 };

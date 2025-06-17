@@ -55,15 +55,17 @@ const IceLevelPage = () => {
       : data.filter((d) => d.Year === filteredYear);
 
   return (
-    <div className="w-full min-h-screen bg-white p-6">
-      <h2 className="text-2xl font-bold mb-6">🧊 Ice Sheet Mass Change</h2>
+    <div className="w-full min-h-screen bg-gray-800 text-white p-6">
+      <h2 className="text-2xl font-bold mb-6 text-white">
+        🧊 Ice Sheet Mass Change
+      </h2>
 
       <div className="mb-6">
-        <label className="font-medium mr-2">Filter by Year:</label>
+        <label className="font-medium mr-2 text-white">Filter by Year:</label>
         <select
           value={filteredYear}
           onChange={(e) => setFilteredYear(e.target.value)}
-          className="border px-2 py-1 rounded"
+          className=" text-black border border-white px-2 py-1 rounded"
         >
           <option value="All">All</option>
           {years.map((year) => (
@@ -74,7 +76,7 @@ const IceLevelPage = () => {
         </select>
       </div>
 
-      <div className="h-[75vh]">
+      <div className="h-[75vh] bg-white rounded-lg shadow-lg p-4">
         <ResponsiveContainer width="100%" height="100%">
           <LineChart data={filteredData}>
             <CartesianGrid strokeDasharray="3 3" />
