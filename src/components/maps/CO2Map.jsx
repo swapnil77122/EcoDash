@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { MapContainer, TileLayer, CircleMarker, Tooltip } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
+import L from "leaflet";
 import useCountryCoords from "../../hooks/useCountryCoords";
 import useCO2EmissionData from "../../hooks/useCO2EmissionData";
 
@@ -8,6 +9,7 @@ const CO2Map = () => {
   const coordsMap = useCountryCoords();
   const emissions = useCO2EmissionData();
   const [selectedYear, setSelectedYear] = useState("2020");
+  const mapRef = useRef(null);
 
   const years = ["2015", "2016", "2017", "2018", "2019", "2020", "2021", "2022"];
 
@@ -23,6 +25,39 @@ const CO2Map = () => {
   };
 
   const filteredEmissions = emissions.filter((e) => e.Year === selectedYear);
+
+  useEffect(() => {
+    if (!mapRef.current) return;
+
+    const map = mapRef.current;
+
+    const legend = L.control({ position: "bottomright" });
+
+    legend.onAdd = function () {
+      const div = L.DomUtil.create("div", "info legend");
+      const grades = [0, 10000000, 20000000, 50000000, 100000000, 200000000, 500000000, 1000000000];
+      const labels = [];
+
+      for (let i = 0; i < grades.length; i++) {
+        const from = grades[i];
+        const to = grades[i + 1];
+
+        labels.push(
+          `<i style="background:${getColor(from + 1)}"></i> ${from.toLocaleString()}${to ? `–${to.toLocaleString()}` : '+'}`
+        );
+      }
+
+      div.innerHTML = labels.join("<br>");
+      return div;
+    };
+
+    legend.addTo(map);
+
+    // Clean up on unmount
+    return () => {
+      legend.remove();
+    };
+  }, [selectedYear]);
 
   return (
     <div className="space-y-4">
@@ -40,7 +75,14 @@ const CO2Map = () => {
       </div>
 
       {/* Map */}
-      <MapContainer center={[20, 0]} zoom={2} style={{ height: "450px", width: "100%" }}>
+      <MapContainer
+        center={[20, 0]}
+        zoom={2}
+        style={{ height: "450px", width: "100%" }}
+        whenCreated={(mapInstance) => {
+          mapRef.current = mapInstance;
+        }}
+      >
         <TileLayer
           attribution='&copy; OpenStreetMap contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

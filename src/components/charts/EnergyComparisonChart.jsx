@@ -10,11 +10,11 @@ import {
 import Papa from "papaparse";
 import { useEffect, useState, useImperativeHandle, forwardRef } from "react";
 
-const EnergyComparisonChart = forwardRef(({ refData }, ) => {
-  const [data, setData] = useState([]);
+const EnergyComparisonChart = forwardRef(({ refData }, ref) => {
+  const [chartData, setChartData] = useState([]);
 
   useEffect(() => {
-    const fetchCSVs = async () => {
+    const fetchData = async () => {
       const renewableRes = await fetch("/data/1.csv");
       const renewableText = await renewableRes.text();
 
@@ -24,55 +24,51 @@ const EnergyComparisonChart = forwardRef(({ refData }, ) => {
       const parsedRenewable = Papa.parse(renewableText, {
         header: true,
         dynamicTyping: true,
-      }).data.filter((d) => d.Mode !== "Total");
+      }).data;
 
       const parsedNonrenewable = Papa.parse(nonrenewableText, {
         header: true,
         dynamicTyping: true,
-      }).data.filter((d) => d.Mode !== "Total");
+      }).data;
 
-      const allModes = [...new Set([...parsedRenewable, ...parsedNonrenewable].map(d => d['Mode of Generation']?.trim()))];
+      const totalRenewable = parsedRenewable
+        .filter((d) => d["Mode of Generation"] !== "Total")
+        .reduce((sum, d) => sum + (d["Contribution (TWh)"] || 0), 0);
 
-      const combined = allModes.map((mode) => {
-        const ren = parsedRenewable.find(d => d['Mode of Generation']?.trim() === mode);
-        const non = parsedNonrenewable.find(d => d['Mode of Generation']?.trim() === mode);
-        return {
-          mode,
-          Renewable: ren?.['Contribution (TWh)'] || 0,
-          NonRenewable: non?.['Contribution (TWh)'] || 0,
-        };
-      });
+      const totalNonRenewable = parsedNonrenewable
+        .filter((d) => d["Mode of Generation"] !== "Total")
+        .reduce((sum, d) => sum + (d["Contribution (TWh)"] || 0), 0);
 
-      setData(combined);
+      const combined = [
+        { type: "Renewable", value: totalRenewable },
+        { type: "Non-Renewable", value: totalNonRenewable },
+      ];
+
+      setChartData(combined);
     };
 
-    fetchCSVs();
+    fetchData();
   }, []);
 
-  useImperativeHandle(refData, () => data, [data]);
+  useImperativeHandle(refData, () => chartData, [chartData]);
 
   return (
     <div className="bg-white p-4 rounded shadow">
-      <h3 className="text-lg font-bold mb-4 ">
-        🔋 Renewable vs Non-Renewable Energy (TWh)
+      <h3 className="text-lg font-bold mb-4">
+        🔋 Total Renewable vs Non-Renewable Energy (TWh)
       </h3>
       <ResponsiveContainer width="100%" height={400}>
-        <BarChart data={data}>
+        <BarChart data={chartData}>
           <XAxis
-  dataKey="mode"
-  angle={-40}
-  textAnchor="end"
-  height={100}
-  tick={{ fill: '#000', fontSize: 12, fontWeight: 'bold' }} // darker, bolder labels
-/>
-<YAxis
-  tick={{ fill: '#000', fontSize: 12, fontWeight: 'bold' }} // darker, bolder labels
-/>
-
+            dataKey="type"
+            tick={{ fill: "#000", fontSize: 14, fontWeight: "bold" }}
+          />
+          <YAxis
+            tick={{ fill: "#000", fontSize: 12, fontWeight: "bold" }}
+          />
           <Tooltip />
           <Legend />
-          <Bar dataKey="Renewable" fill="#22c55e" />
-          <Bar dataKey="NonRenewable" fill="#ef4444" />
+          <Bar dataKey="value" fill="#3b82f6" />
         </BarChart>
       </ResponsiveContainer>
     </div>
