@@ -11,7 +11,7 @@ const CO2Map = () => {
   const [selectedYear, setSelectedYear] = useState("2020");
   const mapRef = useRef(null);
 
-  const years = ["2015", "2016", "2017", "2018", "2019", "2020", "2021", "2022"];
+  const years = ["2015", "2016", "2017", "2018", "2019", "2020"];
 
   const getColor = (co2) => {
     return co2 > 1000000000 ? "#800026" :

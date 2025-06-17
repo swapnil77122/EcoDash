@@ -11,7 +11,29 @@ import {
 } from 'recharts';
 
 const CSV_URL = 'https://raw.githubusercontent.com/owid/co2-data/master/owid-co2-data.csv';
-const TARGET_COUNTRIES = ['China', 'United States', 'India', 'Russia', 'Japan'];
+const TARGET_COUNTRIES = [
+  'China',
+  'United States',
+  'India',
+  'Russia',
+  'Japan',
+  'Germany',
+  'Iran',
+  'South Korea',
+  'Indonesia',
+  'Saudi Arabia',
+  'Canada',
+  'Mexico',
+  'Brazil',
+  'South Africa',
+  'Australia',
+  'United Kingdom',
+  'Turkey',
+  'Italy',
+  'France',
+  'Thailand'
+];
+
 const AVAILABLE_YEARS = ['2021', '2020', '2019', '2018', '2017']; // Add more if needed
 
 const CO2BarChart = () => {

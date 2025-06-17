@@ -14,6 +14,7 @@ export const fetchAQIByCity = async (city) => {
     city: json.data.city.name,
     category: json.data.dominentpol,
     updated: json.data.time.iso,
-    coords: json.data.city.geo, // [lat, lon]
+    coords: json.data.city.geo,
+    iaqi: json.data.iaqi ?? {},
   };
 };
