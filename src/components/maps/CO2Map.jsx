@@ -1,105 +1,76 @@
-import { useState, useEffect } from "react";
-import { MapContainer, TileLayer, GeoJSON, useMap } from "react-leaflet";
+import { useState } from "react";
+import { MapContainer, TileLayer, CircleMarker, Tooltip } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
-import L from "leaflet"; // ✅ Leaflet import for L.control and L.DomUtil
+import useCountryCoords from "../../hooks/useCountryCoords";
+import useCO2EmissionData from "../../hooks/useCO2EmissionData";
 
-const CO2Map = ({ data }) => {
-  const [minCO2, setMinCO2] = useState(0);
-  const [filteredData, setFilteredData] = useState(null);
+const CO2Map = () => {
+  const coordsMap = useCountryCoords();
+  const emissions = useCO2EmissionData();
+  const [selectedYear, setSelectedYear] = useState("2020");
 
-  useEffect(() => {
-    if (!data) return;
+  const years = ["2015", "2016", "2017", "2018", "2019", "2020", "2021", "2022"];
 
-    const filtered = {
-      ...data,
-      features: data.features.filter((f) => (f.properties.co2 || 0) >= minCO2),
-    };
-
-    setFilteredData(filtered);
-    console.log(`🔎 Filtered: ${filtered.features.length} countries >= ${minCO2} Mt`);
-  }, [data, minCO2]);
-
-  const getColor = (d) => {
-    return d > 1000 ? "#800026" :
-           d > 500  ? "#BD0026" :
-           d > 200  ? "#E31A1C" :
-           d > 100  ? "#FC4E2A" :
-           d > 50   ? "#FD8D3C" :
-           d > 20   ? "#FEB24C" :
-           d > 10   ? "#FED976" :
-                      "#FFEDA0";
+  const getColor = (co2) => {
+    return co2 > 1000000000 ? "#800026" :
+           co2 > 500000000  ? "#BD0026" :
+           co2 > 200000000  ? "#E31A1C" :
+           co2 > 100000000  ? "#FC4E2A" :
+           co2 > 50000000   ? "#FD8D3C" :
+           co2 > 20000000   ? "#FEB24C" :
+           co2 > 10000000   ? "#FED976" :
+                              "#FFEDA0";
   };
 
-  const onEachCountry = (feature, layer) => {
-    const country = feature.properties.ADMIN || feature.properties.name || "Unknown";
-    const co2 = feature.properties.co2 || 0;
-
-    console.log(`🌐 ${country}: ${co2} Mt`);
-
-    layer.bindPopup(`<strong>${country}</strong><br/>CO₂: ${co2.toFixed(2)} Mt`);
-    layer.setStyle({
-      fillColor: getColor(co2),
-      fillOpacity: 0.7,
-      color: "#333",
-      weight: 0.8,
-    });
-  };
-
-  const Legend = () => {
-    const map = useMap();
-
-    useEffect(() => {
-      const legend = L.control({ position: "bottomright" });
-
-      legend.onAdd = function () {
-        const div = L.DomUtil.create("div", "info legend");
-        const grades = [0, 10, 20, 50, 100, 200, 500, 1000];
-
-        for (let i = 0; i < grades.length; i++) {
-          div.innerHTML +=
-            `<i style="background:${getColor(grades[i] + 1)}"></i> ` +
-            `${grades[i]}${grades[i + 1] ? `&ndash;${grades[i + 1]}<br>` : "+"}`;
-        }
-        return div;
-      };
-
-      legend.addTo(map);
-      return () => map.removeControl(legend);
-    }, [map]);
-
-    return null;
-  };
+  const filteredEmissions = emissions.filter((e) => e.Year === selectedYear);
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center gap-4">
-        <label htmlFor="minCO2" className="text-sm font-medium">Min CO₂ (Mt):</label>
-        <input
-          id="minCO2"
-          type="range"
-          min="0"
-          max="1000"
-          step="50"
-          value={minCO2}
-          onChange={(e) => setMinCO2(Number(e.target.value))}
-          className="w-full max-w-xs"
-        />
-        <span className="text-sm">{minCO2} Mt</span>
+      {/* Dropdown Filter */}
+      <div className="flex justify-end">
+        <select
+          value={selectedYear}
+          onChange={(e) => setSelectedYear(e.target.value)}
+          className="p-2 border rounded-md shadow"
+        >
+          {years.map((y) => (
+            <option key={y} value={y}>{y}</option>
+          ))}
+        </select>
       </div>
 
+      {/* Map */}
       <MapContainer center={[20, 0]} zoom={2} style={{ height: "450px", width: "100%" }}>
         <TileLayer
           attribution='&copy; OpenStreetMap contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
-        {filteredData && (
-          <GeoJSON
-            key={minCO2}
-            data={filteredData}
-            onEachFeature={onEachCountry}
-          />
-        )}
-        <Legend />
+
+        {filteredEmissions.map((row, idx) => {
+          const co2 = parseFloat(row["CO2 emission (Tons)"]);
+          const coords = coordsMap[row.Country];
+          if (!coords || isNaN(co2)) return null;
+
+          return (
+            <CircleMarker
+              key={idx}
+              center={[coords.lat, coords.lng]}
+              radius={8}
+              fillColor={getColor(co2)}
+              color="#333"
+              weight={0.5}
+              fillOpacity={0.8}
+            >
+              <Tooltip direction="top" offset={[0, -10]} opacity={1}>
+                <div>
+                  <strong>{row.Country}</strong><br />
+                  Year: {row.Year}<br />
+                  CO₂: {Number(co2).toLocaleString()} Tons
+                </div>
+              </Tooltip>
+            </CircleMarker>
+          );
+        })}
       </MapContainer>
     </div>
   );
