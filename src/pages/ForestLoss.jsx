@@ -83,7 +83,6 @@ const ForestLoss = () => {
 
   <XAxis
     type="number"
-    label={{ value: 'Loss (ha)', position: 'insideBottom', offset: -5 }}
     tick={{ fill: '#000', fontWeight: 'bold' }} // <-- Make X-axis ticks bold and black
   />
 
