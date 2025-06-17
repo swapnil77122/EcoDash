@@ -40,11 +40,11 @@ const GlobalTempChart = () => {
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis
   dataKey="year"
-  tick={{ fill: '#000', fontSize: 12, fontWeight: 'bold' }} // darker year labels
+  tick={{ fill: '#fff', fontSize: 12, fontWeight: 'bold' }} // darker year labels
 />
 <YAxis
   unit="°C"
-  tick={{ fill: '#000', fontSize: 12, fontWeight: 'bold' }} // darker Y-axis labels
+  tick={{ fill: '#fff', fontSize: 12, fontWeight: 'bold' }} // darker Y-axis labels
 />
 
           <Tooltip />
