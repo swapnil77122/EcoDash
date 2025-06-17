@@ -1,6 +1,6 @@
 import { NavLink } from "react-router-dom";
 import {
-  Info, Leaf, Cloud, Waves, TreePine, AlertTriangle, Zap
+  Info, Leaf, Cloud, Waves, TreePine, AlertTriangle, Zap, Snowflake
 } from "lucide-react";
 
 const Sidebar = ({ isOpen, setIsOpen }) => {
@@ -10,7 +10,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
     { name: "Air Quality", path: "/air-quality", icon: <Cloud size={18} /> },
     { name: "Sea Level", path: "/sea-level", icon: <Waves size={18} /> },
     { name: "Forest Loss", path: "/forest-loss", icon: <TreePine size={18} /> },
-    { name: "Ice Level", path: "/ice-level", icon: <Waves size={18} /> },
+    { name: "Ice Level", path: "/ice-level", icon: <Snowflake size={18} /> },
     { name: "Disasters", path: "/disasters", icon: <AlertTriangle size={18} /> },
     { name: "Energy", path: "/energy", icon: <Zap size={18} /> },
     { name: "About", path: "/about", icon: <Info size={18} /> },

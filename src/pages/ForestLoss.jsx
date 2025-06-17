@@ -55,7 +55,7 @@ const ForestLoss = () => {
   return (
     <div className="p-4">
       <h2 className="text-xl font-bold text-white mb-4">
-        🌳 Top 20 Countries by Forest Loss ({selectedYear}) (Threshold 30%)
+        🌳 Forest Area Loss ({selectedYear})
       </h2>
 
       <div className="mb-4">
@@ -78,14 +78,26 @@ const ForestLoss = () => {
       ) : (
         <div className="bg-white p-4 rounded shadow">
           <ResponsiveContainer width="100%" height={500}>
-            <BarChart data={chartData} layout="vertical" margin={{ left: 100 }}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis type="number" label={{ value: 'Loss (ha)', position: 'insideBottom', offset: -5 }} />
-              <YAxis type="category" dataKey="country" />
-              <Tooltip />
-              <Legend />
-              <Bar dataKey="loss" fill="#228B22" name={`Loss in ${selectedYear} (ha)`} />
-            </BarChart>
+        <BarChart data={chartData} layout="vertical" margin={{ left: 100 }}>
+  <CartesianGrid strokeDasharray="3 3" />
+
+  <XAxis
+    type="number"
+    label={{ value: 'Loss (ha)', position: 'insideBottom', offset: -5 }}
+    tick={{ fill: '#000', fontWeight: 'bold' }} // <-- Make X-axis ticks bold and black
+  />
+
+  <YAxis
+    type="category"
+    dataKey="country"
+    tick={{ fill: '#000', fontWeight: 'bold' }} // <-- Make Y-axis ticks bold and black
+  />
+
+  <Tooltip />
+  <Legend />
+  <Bar dataKey="loss" fill="#228B22" />
+</BarChart>
+
           </ResponsiveContainer>
         </div>
       )}
