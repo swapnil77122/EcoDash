@@ -67,7 +67,7 @@ const AirQuality = () => {
       <div className="flex gap-2 mb-4">
         <input
           type="text"
-          placeholder="Enter city name (e.g., Delhi)"
+          placeholder="Enter city name "
           value={city}
           onChange={(e) => setCity(e.target.value)}
           className="p-2 border border-gray-300 rounded w-full"

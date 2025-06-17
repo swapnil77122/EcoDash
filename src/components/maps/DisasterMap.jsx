@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import Papa from 'papaparse';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
-import html2canvas from 'html2canvas';
+// import html2canvas from 'html2canvas';
 
 const DisasterMap = () => {
   const [disasters, setDisasters] = useState([]);
@@ -44,20 +44,20 @@ const DisasterMap = () => {
 
     if (!mapElement) return;
 
-    const canvas = await html2canvas(mapElement, {
-      useCORS: true,
-      scale: 2,
-    });
+    // const canvas = await html2canvas(mapElement, {
+    //   useCORS: true,
+    //   scale: 2,
+    // });
 
-    const imgData = canvas.toDataURL('image/png');
+    // const imgData = canvas.toDataURL('image/png');
     const pdf = new jsPDF('landscape', 'mm', 'a4');
 
     pdf.setFontSize(18);
-    pdf.text('Global Disasters Map', 14, 20);
-    pdf.addImage(imgData, 'PNG', 10, 25, 280, 100);
+    // pdf.text('Global Disasters Map', 14, 20);
+    // pdf.addImage(imgData, 'PNG', 10, 25, 280, 100);
 
     pdf.setFontSize(12);
-    pdf.text('Plotted Disaster Locations:', 14, 135);
+    pdf.text('Plotted Disaster Locations:', 135);
 
     const rows = filteredDisasters
       .filter((d) => d.Latitude && d.Longitude)

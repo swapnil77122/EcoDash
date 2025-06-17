@@ -1,4 +1,4 @@
-import { MapContainer, TileLayer, GeoJSON } from 'react-leaflet';
+import { MapContainer, TileLayer, GeoJSON, Tooltip } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import { useEffect, useState } from 'react';
 
@@ -9,9 +9,7 @@ const ForestLoss = () => {
   useEffect(() => {
     fetch('/data/glad_alerts_loss.geojson')
       .then((res) => {
-        if (!res.ok) {
-          throw new Error('Failed to load GeoJSON');
-        }
+        if (!res.ok) throw new Error('Failed to load GeoJSON');
         return res.json();
       })
       .then((data) => setGeoData(data))
@@ -20,23 +18,55 @@ const ForestLoss = () => {
 
   const onEachFeature = (feature, layer) => {
     const props = feature.properties;
-    const popupContent = `
-      <strong>GLAD Alert Region</strong><br/>
-      <ul style="padding-left: 1rem">
-        <li>2015: <a href="${props.data_2015}" target="_blank" rel="noopener noreferrer">View</a></li>
-        <li>2016: <a href="${props.data_2016}" target="_blank" rel="noopener noreferrer">View</a></li>
-        <li>2017: <a href="${props.data_2017}" target="_blank" rel="noopener noreferrer">View</a></li>
-        <li>2018: <a href="${props.data_2018}" target="_blank" rel="noopener noreferrer">View</a></li>
-      </ul>
+
+    const defaultStyle = {
+      color: 'red',
+      weight: 1,
+      fillOpacity: 0.3,
+    };
+
+    const highlightStyle = {
+      color: 'orange',
+      weight: 2,
+      fillOpacity: 0.6,
+    };
+
+    layer.setStyle(defaultStyle);
+
+    layer.on({
+      mouseover: (e) => {
+        e.target.setStyle(highlightStyle);
+        e.target.openTooltip();
+        e.target.bringToFront();
+      },
+      mouseout: (e) => {
+        e.target.setStyle(defaultStyle);
+        e.target.closeTooltip();
+      },
+    });
+
+    // Attach a tooltip to each layer
+    const tooltipContent = `
+      <div style="font-size: 12px;">
+        <strong>🌲 Forest Alert Region</strong><br/>
+        <ul style="padding-left: 1rem; margin: 0;">
+          <li>📅 2015: <a href="${props.data_2015}" target="_blank">View</a></li>
+          <li>📅 2016: <a href="${props.data_2016}" target="_blank">View</a></li>
+          <li>📅 2017: <a href="${props.data_2017}" target="_blank">View</a></li>
+          <li>📅 2018: <a href="${props.data_2018}" target="_blank">View</a></li>
+        </ul>
+      </div>
     `;
-    layer.bindPopup(popupContent);
+    layer.bindTooltip(tooltipContent, {
+      sticky: true,
+      direction: 'top',
+      opacity: 0.9,
+    });
   };
 
   return (
     <div className="p-4">
-      <h2 className="text-xl text-white font-bold mb-4">
-        🌲 Forest Loss (GLAD Alerts)
-      </h2>
+      <h2 className="text-xl text-white font-bold mb-4">🌲 Forest Loss (GLAD Alerts)</h2>
 
       {error && (
         <div className="text-red-600 font-semibold mb-2">
@@ -47,9 +77,8 @@ const ForestLoss = () => {
       <div className="mb-4 bg-white text-sm p-3 rounded shadow max-w-xl">
         <strong>Legend:</strong>
         <ul className="list-disc pl-5">
-          <li><span className="text-red-600 font-bold">Red highlighted regions</span> indicate areas with tree cover loss alerts.</li>
-          <li>Click on any region to see data links for each year (2015–2018).</li>
-          <li>Links open remote GLAD alert datasets hosted on <a href="https://globalforestwatch.org" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">Global Forest Watch</a>.</li>
+          <li><span className="text-red-600 font-bold">Red areas</span> indicate forest loss alerts.</li>
+          <li>Hover to view info and dataset links (2015–2018).</li>
         </ul>
       </div>
 
@@ -64,17 +93,8 @@ const ForestLoss = () => {
             attribution='&copy; <a href="https://osm.org/copyright">OpenStreetMap</a>'
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
-
           {geoData && (
-            <GeoJSON
-              data={geoData}
-              style={() => ({
-                color: 'red',
-                weight: 1,
-                fillOpacity: 0.3,
-              })}
-              onEachFeature={onEachFeature}
-            />
+            <GeoJSON data={geoData} onEachFeature={onEachFeature} />
           )}
         </MapContainer>
       </div>

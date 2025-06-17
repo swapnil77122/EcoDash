@@ -29,8 +29,14 @@ const SeaLevelLineChart = forwardRef(({ refData }, ) => {
       <ResponsiveContainer>
         <LineChart data={data}>
           <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="year" />
-          <YAxis unit=" mm" />
+           <XAxis
+            dataKey="year"
+            tick={{ fill: "white", fontWeight: "bold" }}
+          />
+          <YAxis
+            unit=" mm"
+            tick={{ fill: "white", fontWeight: "bold" }}
+          />
           <Tooltip />
           <Line
             type="monotone"

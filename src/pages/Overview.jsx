@@ -50,7 +50,7 @@ const Overview = () => {
         </Card>
 
         <Card>
-          <h2 className="text-xl font-semibold mb-4 text-white">🗺️ CO2 Emissions by Country</h2>
+          <h2 className="text-xl font-semibold mb-4 text-white">🗺️ CO2 Emissions by Country in map</h2>
           {loading ? (
             <p className="text-white">Loading CO₂ map data...</p>
           ) : geoData ? (

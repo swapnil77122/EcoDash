@@ -76,7 +76,7 @@ const CO2BarChart = () => {
   return (
     <div className="w-full mt-8">
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-lg font-semibold text-white">CO₂ Emissions by Country</h2>
+        <h2 className="text-lg font-semibold text-white"></h2>
         <select
           value={year}
           onChange={e => setYear(e.target.value)}
