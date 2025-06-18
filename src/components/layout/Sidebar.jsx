@@ -24,8 +24,8 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
       `}
     >
       <div className="p-4">
-        {/* Header for mobile */}
-        <div className="flex items-center justify-between mb-6 md:hidden">
+        {/* Mobile Close Button */}
+        <div className="flex items-center justify-between mb-4 md:hidden">
           <h2 className="text-base font-semibold text-blue-700">Menu</h2>
           <button
             onClick={() => setIsOpen(false)}
@@ -35,8 +35,13 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
           </button>
         </div>
 
+        {/* EcoDash Title (left-aligned and bigger) */}
+        <h1 className="text-2xl font-extrabold text-blue-700 mb-6">
+          🌍 EcoDash
+        </h1>
+
         {/* Navigation Links */}
-        <nav className="space-y-1 mt-8">
+        <nav className="space-y-1 mt-4">
           {navItems.map(({ name, path, icon }) => (
             <NavLink
               key={name}
