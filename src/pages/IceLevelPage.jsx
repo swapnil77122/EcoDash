@@ -20,7 +20,6 @@ const IceLevelPage = () => {
       .then((res) => res.text())
       .then((text) => {
         const parsed = Papa.parse(text, { header: true }).data;
-
         const dataMap = {};
 
         parsed.forEach((d) => {
@@ -54,14 +53,13 @@ const IceLevelPage = () => {
       ? data
       : data.filter((d) => d.Year === filteredYear);
 
-  // Custom Tooltip
   const CustomTooltip = ({ active, payload, label }) => {
     if (active && payload && payload.length) {
       return (
-        <div className="bg-white p-2 rounded shadow text-black text-sm">
-          <p className="font-semibold">📅 Date: {label}</p>
+        <div className="bg-white p-2 rounded shadow text-black text-xs">
+          <p className="font-semibold text-xs">📅 Date: {label}</p>
           {payload.map((entry, i) => (
-            <p key={i} style={{ color: entry.color }}>
+            <p key={i} className="text-xs" style={{ color: entry.color }}>
               {entry.name}: {entry.value.toLocaleString()} Gt
             </p>
           ))}
@@ -72,17 +70,17 @@ const IceLevelPage = () => {
   };
 
   return (
-    <div className="w-full min-h-screen bg-white text-black p-6">
-      <h2 className="text-2xl font-bold mb-6 text-black">
+    <div className="w-full min-h-screen bg-white text-black p-6 text-sm">
+      <h2 className="text-base font-semibold mb-4 text-black">
         🧊 Ice Sheet Mass Change
       </h2>
 
-      <div className="mb-6">
-        <label className="font-medium mr-2 text-black">Filter by Year:</label>
+      <div className="mb-4">
+        <label className="font-medium mr-2 text-black text-sm">Filter by Year:</label>
         <select
           value={filteredYear}
           onChange={(e) => setFilteredYear(e.target.value)}
-          className="text-black border border-black px-2 py-1 rounded"
+          className="text-black border border-black px-2 py-1 rounded text-sm"
         >
           <option value="All">All</option>
           {years.map((year) => (
@@ -97,18 +95,35 @@ const IceLevelPage = () => {
         <ResponsiveContainer width="100%" height="100%">
           <LineChart data={filteredData}>
             <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="Day" stroke="#000" />
-            <YAxis unit=" Gt" stroke="#000" />
+            <XAxis
+              dataKey="Day"
+              stroke="#000"
+              tick={{ fontSize: 10 }}
+            />
+            <YAxis
+              unit=" Gt"
+              stroke="#000"
+              tick={{ fontSize: 10 }}
+              label={{
+                value: "Mass Change (Gt)",
+                angle: -90,
+                position: "insideLeft",
+                offset: -10,
+                fill: "#000",
+                fontSize: 10,
+                fontWeight: "bold"
+              }}
+            />
             <Tooltip content={<CustomTooltip />} />
-            <Legend />
+            <Legend wrapperStyle={{ fontSize: 10 }} />
             <Line
               type="monotone"
               dataKey="Antarctica"
               name="Antarctica"
               stroke="#3b82f6"
               strokeWidth={2}
-              dot={{ r: 3 }}
-              activeDot={{ r: 5 }}
+              dot={{ r: 2 }}
+              activeDot={{ r: 4 }}
             />
             <Line
               type="monotone"
@@ -116,8 +131,8 @@ const IceLevelPage = () => {
               name="Greenland"
               stroke="#10b981"
               strokeWidth={2}
-              dot={{ r: 3 }}
-              activeDot={{ r: 5 }}
+              dot={{ r: 2 }}
+              activeDot={{ r: 4 }}
             />
           </LineChart>
         </ResponsiveContainer>

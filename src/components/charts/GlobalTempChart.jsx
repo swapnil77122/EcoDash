@@ -38,24 +38,24 @@ const GlobalTempChart = () => {
       .catch(console.error);
   }, []);
 
-  if (!data.length) return <div className="text-center text-black">Loading temperature...</div>;
+  if (!data.length) return <div className="text-center text-black text-sm">Loading temperature...</div>;
 
   return (
-    <div className="bg-white p-6 rounded-2xl shadow text-black">
-      <h3 className="text-xl font-bold mb-4">🌡️ Simulated Global Temperature Trend</h3>
+    <div className="bg-white p-4 rounded-xl shadow text-black">
+      <h3 className="text-base font-semibold mb-3">🌡️ Simulated Global Temperature Trend</h3>
       <ResponsiveContainer width="100%" height={400}>
         <LineChart data={data}>
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis
             dataKey="year"
-            tick={{ fill: '#000', fontSize: 12, fontWeight: 'bold' }}
+            tick={{ fill: '#000', fontSize: 10, fontWeight: 'bold' }}
           />
           <YAxis
             unit="°C"
-            tick={{ fill: '#000', fontSize: 12, fontWeight: 'bold' }}
+            tick={{ fill: '#000', fontSize: 10, fontWeight: 'bold' }}
           />
           <Tooltip />
-          <Line type="monotone" dataKey="temp" stroke="#ef4444" strokeWidth={2} />
+          <Line type="monotone" dataKey="temp" stroke="#ef4444" strokeWidth={2} dot={{ r: 1.5 }} />
         </LineChart>
       </ResponsiveContainer>
     </div>

@@ -55,13 +55,13 @@ const CO2BarChart = () => {
   }, [year, rawData]);
 
   return (
-    <div className="w-full mt-8 bg-white p-4 rounded shadow text-black">
-      <div className="flex items-center justify-between mb-4">
-        <h2 className="text-lg font-semibold">Top CO₂ Emitters in {year}</h2>
+    <div className="w-full mt-6 bg-white p-3 rounded shadow text-black text-sm">
+      <div className="flex items-center justify-between mb-3">
+        <h2 className="text-base font-semibold">🌍 CO₂ Emitters – {year}</h2>
         <select
           value={year}
           onChange={e => setYear(e.target.value)}
-          className="border rounded px-2 py-1 text-sm"
+          className="border rounded px-2 py-1 text-xs"
         >
           {AVAILABLE_YEARS.map(y => (
             <option key={y} value={y}>{y}</option>
@@ -70,20 +70,23 @@ const CO2BarChart = () => {
       </div>
 
       {data.length === 0 ? (
-        <div className="text-center text-gray-600">Loading data...</div>
+        <div className="text-center text-gray-500 text-xs">Loading data...</div>
       ) : (
-        <ResponsiveContainer width="100%" height={400}>
+        <ResponsiveContainer width="100%" height={350}>
           <BarChart data={data}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis
               dataKey="country"
-              tick={{ fill: '#000', fontSize: 12, fontWeight: 'bold' }}
+              tick={{ fill: '#000', fontSize: 10, fontWeight: 500 }}
             />
             <YAxis
               unit=" Mt"
-              tick={{ fill: '#000', fontSize: 12, fontWeight: 'bold' }}
+              tick={{ fill: '#000', fontSize: 10, fontWeight: 500 }}
             />
-            <Tooltip />
+            <Tooltip
+              contentStyle={{ fontSize: '10px' }}
+              labelStyle={{ fontSize: '10px' }}
+            />
             <Bar dataKey="co2" fill="#22c55e" />
           </BarChart>
         </ResponsiveContainer>

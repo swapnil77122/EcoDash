@@ -1,9 +1,34 @@
-import { MapContainer, TileLayer, CircleMarker, Popup } from 'react-leaflet';
+import { MapContainer, TileLayer, CircleMarker, Popup, useMap } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import { useEffect, useRef, useState } from 'react';
 import Papa from 'papaparse';
-import jsPDF from 'jspdf';
-import autoTable from 'jspdf-autotable';
+
+// Mapping of region names to coordinates
+const regionCoords = {
+  Africa: [1, 17],
+  Asia: [34, 100],
+  Europe: [54, 15],
+  'North America': [45, -100],
+  'South America': [-15, -60],
+  Oceania: [-22, 130],
+  'Central America': [15, -85],
+  Caribbean: [18, -66],
+  'Middle East': [30, 45],
+};
+
+const RegionFlyTo = ({ region }) => {
+  const map = useMap();
+
+  useEffect(() => {
+    if (region !== 'All' && regionCoords[region]) {
+      map.flyTo(regionCoords[region], 4, { duration: 1.5 });
+    } else {
+      map.flyTo([10, 0], 2, { duration: 1.5 });
+    }
+  }, [region, map]);
+
+  return null;
+};
 
 const DisasterMap = () => {
   const [disasters, setDisasters] = useState([]);
@@ -38,54 +63,18 @@ const DisasterMap = () => {
     setFilters({ ...filters, [e.target.name]: e.target.value });
   };
 
-  const handleDownloadPDF = async () => {
-    const mapElement = mapRef.current;
-
-    if (!mapElement) return;
-
-    const pdf = new jsPDF('landscape', 'mm', 'a4');
-
-    pdf.setFontSize(18);
-    pdf.setFontSize(12);
-    pdf.text('Plotted Disaster Locations:', 135);
-
-    const rows = filteredDisasters
-      .filter((d) => d.Latitude && d.Longitude)
-      .slice(0, 20)
-      .map((d) => [
-        d['Disaster Type'] || 'N/A',
-        d.Country || 'N/A',
-        d.Region || 'N/A',
-        d['Start Year'] || 'N/A',
-        d['Total Affected'] || 'N/A',
-        d['Total Deaths'] || 'N/A',
-      ]);
-
-    if (rows.length > 0) {
-      autoTable(pdf, {
-        head: [['Type', 'Country', 'Region', 'Year', 'Affected', 'Deaths']],
-        body: rows,
-        startY: 140,
-        styles: { fontSize: 10 },
-        headStyles: { fillColor: [22, 160, 133] },
-      });
-    } else {
-      pdf.text('No data available for selected filters.', 14, 145);
-    }
-
-    pdf.save('DisasterMap.pdf');
-  };
-
   return (
     <div>
-      <div className="flex flex-wrap  mb-4 text-white">
-        <div>
-          <label className="mr-2">Year:</label>
+      {/* Filter Section */}
+      <div className="flex flex-wrap items-center gap-6 mb-4 text-black">
+        {/* Year Filter */}
+        <div className="flex items-center gap-2">
+          <span className="font-semibold">Year</span>
           <select
             name="year"
             value={filters.year}
             onChange={handleChange}
-            className="text-black px-2 py-1 rounded border border-black"
+            className="text-black px-3 py-1 rounded border border-black"
           >
             <option value="All">All</option>
             {years.map((year) => (
@@ -96,13 +85,14 @@ const DisasterMap = () => {
           </select>
         </div>
 
-        <div>
-          <label className="mr-2">Region:</label>
+        {/* Region Filter */}
+        <div className="flex items-center gap-2 text-black">
+          <span className="font-semibold">Region</span>
           <select
             name="region"
             value={filters.region}
             onChange={handleChange}
-            className="text-black px-2 py-1 rounded border border-black"
+            className="text-black px-3 py-1 rounded border border-black"
           >
             <option value="All">All</option>
             {regions.map((region) => (
@@ -112,17 +102,12 @@ const DisasterMap = () => {
             ))}
           </select>
         </div>
-
-        <button
-          onClick={handleDownloadPDF}
-          className="bg-blue-600 text-white px-4 py-1 rounded"
-        >
-          📄 Download PDF
-        </button>
       </div>
 
+      {/* Error Message */}
       {error && <div className="text-red-500">Error loading data: {error}</div>}
 
+      {/* Map */}
       <div ref={mapRef}>
         <MapContainer
           center={[10, 0]}
@@ -131,6 +116,8 @@ const DisasterMap = () => {
           className="h-[80vh] w-full rounded shadow"
         >
           <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+          <RegionFlyTo region={filters.region} />
+
           {filteredDisasters.map((disaster, idx) => {
             const lat = parseFloat(disaster['Latitude']);
             const lon = parseFloat(disaster['Longitude']);
@@ -164,12 +151,15 @@ const DisasterMap = () => {
         </MapContainer>
       </div>
 
-      <div className="text-sm text-white mt-4">
-        <p>
-          <span className="inline-block w-4 h-4 bg-red-600 rounded-full mr-2"></span>
-          Disaster Locations (hover for details)
-        </p>
-      </div>
+      {/* Legend */}
+      {/* Legend */}
+<div className="text-sm text-red-600 font-semibold mt-4">
+  <p>
+    <span className="inline-block w-4 h-4 bg-red-600 rounded-full mr-2"></span>
+    Disaster Locations (hover for details)
+  </p>
+</div>
+
     </div>
   );
 };

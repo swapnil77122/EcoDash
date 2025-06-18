@@ -1,68 +1,70 @@
-import { useState, useEffect, useRef } from "react";
-import { MapContainer, TileLayer, CircleMarker, Tooltip } from "react-leaflet";
+import { useState, useEffect } from "react";
+import {
+  MapContainer,
+  TileLayer,
+  CircleMarker,
+  Tooltip,
+  useMap,
+} from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import useCountryCoords from "../../hooks/useCountryCoords";
 import useCO2EmissionData from "../../hooks/useCO2EmissionData";
 
+const featuredCountries = [
+  "Nepal", "North Korea", "Mongolia", "Morocco", "Malawi",
+  "Kazakhstan", "Georgia", "Bhutan", "Ghana", "Honduras",
+  "Republic of the Congo", "Romania", "Rwanda", "San Marino", "Senegal",
+  "Serbia", "Seychelles", "Sierra Leone", "Slovakia", "Slovenia",
+  "Solomon Islands", "Somalia", "Sri Lanka", "Sudan", "Suriname",
+  "Syria", "Tajikistan", "Tanzania", "Togo", "Trinidad and Tobago",
+  "Tunisia", "Turkmenistan", "Tuvalu", "Uganda", "United Arab Emirates"
+];
+
+const years = ["2015", "2016", "2017", "2018", "2019", "2020"];
+
+const getColor = (co2) => {
+  return co2 > 1000000000 ? "#800026" :
+         co2 > 500000000  ? "#BD0026" :
+         co2 > 200000000  ? "#E31A1C" :
+         co2 > 100000000  ? "#FC4E2A" :
+         co2 > 50000000   ? "#FD8D3C" :
+         co2 > 20000000   ? "#FEB24C" :
+         co2 > 10000000   ? "#FED976" :
+                            "#FFEDA0";
+};
+
+// Component to zoom to selected country
+const CountryZoom = ({ selectedCountry, coordsMap }) => {
+  const map = useMap();
+
+  useEffect(() => {
+    if (selectedCountry && coordsMap[selectedCountry]) {
+      const { lat, lng } = coordsMap[selectedCountry];
+      map.flyTo([lat, lng], 5);
+    } else {
+      map.flyTo([20, 0], 2); // default global view
+    }
+  }, [selectedCountry, coordsMap, map]);
+
+  return null;
+};
+
 const CO2Map = () => {
   const coordsMap = useCountryCoords();
   const emissions = useCO2EmissionData();
+
   const [selectedYear, setSelectedYear] = useState("2020");
-  const mapRef = useRef(null);
+  const [selectedCountry, setSelectedCountry] = useState("");
 
-  const years = ["2015", "2016", "2017", "2018", "2019", "2020"];
-
-  const getColor = (co2) => {
-    return co2 > 1000000000 ? "#800026" :
-           co2 > 500000000  ? "#BD0026" :
-           co2 > 200000000  ? "#E31A1C" :
-           co2 > 100000000  ? "#FC4E2A" :
-           co2 > 50000000   ? "#FD8D3C" :
-           co2 > 20000000   ? "#FEB24C" :
-           co2 > 10000000   ? "#FED976" :
-                              "#FFEDA0";
-  };
-
-  const filteredEmissions = emissions.filter((e) => e.Year === selectedYear);
-
-  useEffect(() => {
-    if (!mapRef.current) return;
-
-    const map = mapRef.current;
-
-    const legend = L.control({ position: "bottomright" });
-
-    legend.onAdd = function () {
-      const div = L.DomUtil.create("div", "info legend");
-      const grades = [0, 10000000, 20000000, 50000000, 100000000, 200000000, 500000000, 1000000000];
-      const labels = [];
-
-      for (let i = 0; i < grades.length; i++) {
-        const from = grades[i];
-        const to = grades[i + 1];
-
-        labels.push(
-          `<i style="background:${getColor(from + 1)}"></i> ${from.toLocaleString()}${to ? `–${to.toLocaleString()}` : '+'}`
-        );
-      }
-
-      div.innerHTML = labels.join("<br>");
-      return div;
-    };
-
-    legend.addTo(map);
-
-    // Clean up on unmount
-    return () => {
-      legend.remove();
-    };
-  }, [selectedYear]);
+  const filteredEmissions = emissions.filter(
+    (e) => e.Year === selectedYear
+  );
 
   return (
     <div className="space-y-4">
-      {/* Dropdown Filter */}
-      <div className="flex justify-end">
+      {/* Filters side by side */}
+      <div className="flex flex-row flex-wrap gap-4 justify-start items-center">
         <select
           value={selectedYear}
           onChange={(e) => setSelectedYear(e.target.value)}
@@ -72,21 +74,32 @@ const CO2Map = () => {
             <option key={y} value={y}>{y}</option>
           ))}
         </select>
+
+        <select
+          value={selectedCountry}
+          onChange={(e) => setSelectedCountry(e.target.value)}
+          className="p-2 border rounded-md shadow"
+        >
+          <option value="">All</option>
+          {featuredCountries.map((c) => (
+            <option key={c} value={c}>{c}</option>
+          ))}
+        </select>
       </div>
 
       {/* Map */}
       <MapContainer
+        key={`${selectedYear}-${selectedCountry}`}
         center={[20, 0]}
         zoom={2}
         style={{ height: "450px", width: "100%" }}
-        whenCreated={(mapInstance) => {
-          mapRef.current = mapInstance;
-        }}
       >
         <TileLayer
           attribution='&copy; OpenStreetMap contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
+
+        <CountryZoom selectedCountry={selectedCountry} coordsMap={coordsMap} />
 
         {filteredEmissions.map((row, idx) => {
           const co2 = parseFloat(row["CO2 emission (Tons)"]);

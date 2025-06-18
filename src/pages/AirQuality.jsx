@@ -58,8 +58,8 @@ const AirQuality = () => {
   };
 
   return (
-    <div className="min-h-screen p-4 bg-white text-black">
-      <h2 className="text-2xl font-bold mb-4">🌍 Global Air Quality</h2>
+    <div className="min-h-screen p-4 bg-white text-black text-sm">
+      <h2 className="text-xl font-bold mb-4">🌍 Global Air Quality</h2>
 
       <div className="flex gap-2 mb-4">
         <input
@@ -67,23 +67,23 @@ const AirQuality = () => {
           placeholder="Enter city name"
           value={city}
           onChange={(e) => setCity(e.target.value)}
-          className="p-2 border border-gray-300 rounded w-full"
+          className="p-2 border border-gray-300 rounded w-full text-sm"
         />
         <button
           onClick={handleSearch}
-          className="px-4 py-2 bg-blue-600 text-white rounded"
+          className="px-4 py-2 bg-blue-600 text-white rounded text-sm"
           disabled={loading}
         >
           {loading ? "Loading..." : "Search"}
         </button>
       </div>
 
-      {error && <p className="text-red-500">{error}</p>}
+      {error && <p className="text-red-500 text-sm">{error}</p>}
 
       {aqiData ? (
         <>
-          <div ref={exportRef} className="space-y-4">
-            <div className="bg-white p-4 rounded shadow border border-gray-200">
+          <div ref={exportRef} className="space-y-4 text-sm">
+            <div className="bg-white p-4 rounded shadow border border-gray-200 text-sm">
               <p><strong>City:</strong> {aqiData.city}</p>
               <p><strong>AQI:</strong> {aqiData.aqi}</p>
               <p><strong>Main Pollutant:</strong> {aqiData.category}</p>
@@ -102,7 +102,7 @@ const AirQuality = () => {
               />
               <Marker position={position}>
                 <Popup>
-                  <div>
+                  <div className="text-xs">
                     <strong>{aqiData.city}</strong><br />
                     AQI: {aqiData.aqi}<br />
                     Pollutant: {aqiData.category}
@@ -114,7 +114,7 @@ const AirQuality = () => {
 
           <button
             onClick={handleDownloadPDF}
-            className="bg-blue-600 text-white px-4 py-2 rounded mt-4"
+            className="bg-blue-600 text-white px-4 py-2 rounded mt-4 text-sm"
           >
             📄 Download PDF
           </button>

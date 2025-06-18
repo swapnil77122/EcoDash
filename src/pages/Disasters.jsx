@@ -2,10 +2,10 @@ import DisasterMap from '../components/maps/DisasterMap';
 
 const Disasters = () => {
   return (
-    <div className="p-4 bg-white min-h-screen text-black">
-      <h2 className="text-xl font-bold mb-4">
+    <div className="p-4 bg-white min-h-screen text-black text-sm">
+      <h3 className="text-xl font-bold mb-4">
         🌍 Global Disasters Map
-      </h2>
+      </h3>
       <DisasterMap />
     </div>
   );

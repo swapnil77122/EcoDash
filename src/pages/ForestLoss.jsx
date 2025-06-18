@@ -53,15 +53,15 @@ const ForestLoss = () => {
   }, [allData, selectedYear]);
 
   return (
-    <div className="p-4 bg-white text-black min-h-screen">
-      <h2 className="text-xl font-bold mb-4">
+    <div className="p-4 bg-white text-black text-sm min-h-screen">
+      <h2 className="text-base font-semibold mb-4">
         🌳 Forest Area Loss ({selectedYear})
       </h2>
 
       <div className="mb-4">
-        <label className="font-medium mr-2">Select Year:</label>
+        <label className="mr-2 font-medium">Select Year:</label>
         <select
-          className="p-2 rounded shadow border border-black"
+          className="p-1 rounded shadow border border-black text-sm"
           value={selectedYear}
           onChange={(e) => setSelectedYear(parseInt(e.target.value))}
         >
@@ -76,40 +76,44 @@ const ForestLoss = () => {
       {chartData.length === 0 ? (
         <p>Loading or no valid data found...</p>
       ) : (
-        <div className="bg-white p-4 rounded shadow">
+        <div className="bg-white p-4 rounded shadow text-sm">
           <ResponsiveContainer width="100%" height={500}>
-  <BarChart data={chartData} margin={{ top: 20, right: 30, left: 40, bottom: 100 }}>
-    <CartesianGrid strokeDasharray="3 3" />
+            <BarChart data={chartData} margin={{ top: 20, right: 30, left: 40, bottom: 100 }}>
+              <CartesianGrid strokeDasharray="3 3" />
 
-    <XAxis
-      dataKey="country"
-      type="category"
-      interval={0}
-      tick={{ fill: '#000', fontWeight: 'bold', angle: -35, textAnchor: 'end' }}
-      height={80}
-    />
+              <XAxis
+                dataKey="country"
+                type="category"
+                interval={0}
+                tick={{
+                  fill: '#000',
+                  fontWeight: 'normal',
+                  fontSize: 10,
+                  angle: -35,
+                  textAnchor: 'end',
+                }}
+                height={80}
+              />
 
-<YAxis
-  type="number"
-  tick={{ fill: '#000', fontWeight: 'bold' }}
-  label={{
-    value: 'Forest Loss (ha)',
-    angle: -90,
-    position: 'insideLeft',
-    dx: -40, // moved further left
-    fill: '#000',
-    fontWeight: 'bold',
-  }}
-/>
+              <YAxis
+                type="number"
+                tick={{ fill: '#000', fontWeight: 'normal', fontSize: 10 }}
+                label={{
+                  value: 'Forest Loss (ha)',
+                  angle: -90,
+                  position: 'insideLeft',
+                  dx: -40,
+                  fill: '#000',
+                  fontWeight: 'bold',
+                  fontSize: 10,
+                }}
+              />
 
-
-
-    <Tooltip />
-    <Legend />
-    <Bar dataKey="loss" fill="#228B22" />
-  </BarChart>
-</ResponsiveContainer>
-
+              <Tooltip />
+              <Legend wrapperStyle={{ fontSize: 10 }} />
+              <Bar dataKey="loss" fill="#228B22" />
+            </BarChart>
+          </ResponsiveContainer>
         </div>
       )}
     </div>

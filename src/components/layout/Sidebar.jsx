@@ -5,15 +5,15 @@ import {
 
 const Sidebar = ({ isOpen, setIsOpen }) => {
   const navItems = [
-    { name: "Overview", path: "/", icon: <Leaf size={18} /> },
-    { name: "Emissions", path: "/emissions", icon: <Cloud size={18} /> },
-    { name: "Air Quality", path: "/air-quality", icon: <Wind size={18} /> },
-    { name: "Sea Level", path: "/sea-level", icon: <Waves size={18} /> },
-    { name: "Forest Loss", path: "/forest-loss", icon: <TreePine size={18} /> },
-    { name: "Ice Level", path: "/ice-level", icon: <Snowflake size={18} /> },
-    { name: "Disasters", path: "/disasters", icon: <AlertTriangle size={18} /> },
-    { name: "Energy", path: "/energy", icon: <Zap size={18} /> },
-    { name: "About", path: "/about", icon: <Info size={18} /> },
+    { name: "Overview", path: "/", icon: <Leaf size={16} /> },
+    { name: "Emissions", path: "/emissions", icon: <Cloud size={16} /> },
+    { name: "Air Quality", path: "/air-quality", icon: <Wind size={16} /> },
+    { name: "Sea Level", path: "/sea-level", icon: <Waves size={16} /> },
+    { name: "Forest Loss", path: "/forest-loss", icon: <TreePine size={16} /> },
+    { name: "Ice Level", path: "/ice-level", icon: <Snowflake size={16} /> },
+    { name: "Disasters", path: "/disasters", icon: <AlertTriangle size={16} /> },
+    { name: "Energy", path: "/energy", icon: <Zap size={16} /> },
+    { name: "About", path: "/about", icon: <Info size={16} /> },
   ];
 
   return (
@@ -23,35 +23,35 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
         md:translate-x-0 md:static md:block
       `}
     >
-      <div className="p-5">
+      <div className="p-4">
         {/* Header for mobile */}
-        <div className="flex items-center justify-between mb-8 md:hidden">
-          <h2 className="text-xl font-bold text-blue-700">Menu</h2>
+        <div className="flex items-center justify-between mb-6 md:hidden">
+          <h2 className="text-base font-semibold text-blue-700">Menu</h2>
           <button
             onClick={() => setIsOpen(false)}
-            className="text-2xl text-gray-700"
+            className="text-xl text-gray-700"
           >
             ✕
           </button>
         </div>
 
-        {/* Navigation Links - Pushed Down */}
-        <nav className="space-y-2 mt-10">
+        {/* Navigation Links */}
+        <nav className="space-y-1 mt-8">
           {navItems.map(({ name, path, icon }) => (
             <NavLink
               key={name}
               to={path}
               className={({ isActive }) =>
-                `flex items-center gap-3 px-4 py-2 rounded-lg font-bold transition ${
+                `flex items-center gap-2 px-3 py-2 rounded-md text-sm transition ${
                   isActive
                     ? "bg-blue-800 text-white hover:bg-blue-800"
-                    : "text-black hover:bg-blue-500"
+                    : "text-black hover:bg-blue-500 hover:text-white"
                 }`
               }
               onClick={() => setIsOpen(false)}
             >
               {icon}
-              {name}
+              <span className="font-bold">{name}</span>
             </NavLink>
           ))}
         </nav>

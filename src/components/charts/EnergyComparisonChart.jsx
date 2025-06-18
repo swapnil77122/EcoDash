@@ -10,7 +10,7 @@ import {
 import Papa from "papaparse";
 import { useEffect, useState, useImperativeHandle, forwardRef } from "react";
 
-const EnergyComparisonChart = forwardRef(({ refData }, ref) => {
+const EnergyComparisonChart = forwardRef(({ refData }) => {
   const [chartData, setChartData] = useState([]);
 
   useEffect(() => {
@@ -53,21 +53,24 @@ const EnergyComparisonChart = forwardRef(({ refData }, ref) => {
   useImperativeHandle(refData, () => chartData, [chartData]);
 
   return (
-    <div className="bg-white p-6 rounded-2xl shadow text-black">
-      <h3 className="text-xl font-bold mb-4">
+    <div className="bg-white p-4 rounded-xl shadow text-black text-sm">
+      <h3 className="text-base font-semibold mb-3">
         🔋 Total Renewable vs Non-Renewable Energy (TWh)
       </h3>
-      <ResponsiveContainer width="100%" height={400}>
+      <ResponsiveContainer width="100%" height={300}>
         <BarChart data={chartData}>
           <XAxis
             dataKey="type"
-            tick={{ fill: "#000", fontSize: 14, fontWeight: "bold" }}
+            tick={{ fill: "#000", fontSize: 10, fontWeight: 500 }}
           />
           <YAxis
-            tick={{ fill: "#000", fontSize: 12, fontWeight: "bold" }}
+            tick={{ fill: "#000", fontSize: 10, fontWeight: 500 }}
           />
-          <Tooltip />
-          <Legend />
+          <Tooltip
+            contentStyle={{ fontSize: '10px' }}
+            labelStyle={{ fontSize: '10px' }}
+          />
+          <Legend wrapperStyle={{ fontSize: '10px' }} />
           <Bar dataKey="value" fill="#3b82f6" />
         </BarChart>
       </ResponsiveContainer>

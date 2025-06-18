@@ -56,8 +56,8 @@ export default function Emissions() {
   };
 
   return (
-    <div className="min-h-[calc(100vh-2rem)] p-8 bg-white text-black">
-      <h2 className="text-2xl font-semibold mb-4">🌍 Global CO₂ Levels</h2>
+    <div className="min-h-[calc(100vh-2rem)] p-8 bg-white text-black text-sm">
+      <h2 className="text-lg font-semibold mb-4">🌍 Global CO₂ Levels</h2>
 
       {error && <p className="text-red-600">{error}</p>}
       {!data && !error && <p>Loading...</p>}
@@ -69,7 +69,7 @@ export default function Emissions() {
       {data && (
         <button
           onClick={handleDownloadPDF}
-          className="bg-blue-600 text-white px-4 py-2 rounded"
+          className="bg-blue-600 text-white px-4 py-2 rounded text-sm"
         >
           📄 Download PDF Report
         </button>
