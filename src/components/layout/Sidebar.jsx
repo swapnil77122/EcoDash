@@ -18,26 +18,25 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
 
   return (
     <aside
-      className={`
-        fixed top-0 left-0 h-full w-64 bg-white shadow-lg z-50 transform transition-transform duration-300
+      className={`fixed top-0 left-0 h-full w-64 bg-white shadow-lg z-40 transform transition-transform duration-300
         ${isOpen ? "translate-x-0" : "-translate-x-full"}
         md:translate-x-0 md:static md:block
       `}
     >
       <div className="p-5">
-        <div className="flex items-center justify-between mb-8">
-          <div className="flex items-center gap-2">
-            <button
-              onClick={() => setIsOpen(false)}
-              className="text-2xl text-gray-700 md:hidden"
-            >
-              ☰
-            </button>
-            <h2 className="text-2xl font-extrabold text-blue-600">EcoDash</h2>
-          </div>
+        {/* Header for mobile */}
+        <div className="flex items-center justify-between mb-8 md:hidden">
+          <h2 className="text-xl font-bold text-blue-700">Menu</h2>
+          <button
+            onClick={() => setIsOpen(false)}
+            className="text-2xl text-gray-700"
+          >
+            ✕
+          </button>
         </div>
 
-        <nav className="space-y-2">
+        {/* Navigation Links - Pushed Down */}
+        <nav className="space-y-2 mt-10">
           {navItems.map(({ name, path, icon }) => (
             <NavLink
               key={name}

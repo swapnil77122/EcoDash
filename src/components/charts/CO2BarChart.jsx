@@ -72,7 +72,7 @@ const CO2BarChart = () => {
       {data.length === 0 ? (
         <div className="text-center text-gray-600">Loading data...</div>
       ) : (
-        <ResponsiveContainer width="100%" height={300}>
+        <ResponsiveContainer width="100%" height={400}>
           <BarChart data={data}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis
