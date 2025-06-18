@@ -87,9 +87,10 @@ const Overview = () => {
 
   return (
     <div className="p-4 space-y-4 bg-white text-black">
-      <div className="bg-blue-700 text-white text-center text-sm font-bold p-2 rounded">
-        🌍 Global Climate Insights Dashboard
-      </div>
+      <div className="bg-blue-700 text-white text-center text-xl md:text-2xl font-bold py-4 px-2 rounded shadow">
+  🌍 Global Climate Insights Dashboard
+</div>
+
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs text-gray-700">
         <Card className="p-2 text-center">
