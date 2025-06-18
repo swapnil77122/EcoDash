@@ -32,6 +32,7 @@ const RegionFlyTo = ({ region }) => {
 const DisasterMap = () => {
   const [disasters, setDisasters] = useState([]);
   const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [filters, setFilters] = useState({
     year: 'All',
     region: 'All',
@@ -47,8 +48,12 @@ const DisasterMap = () => {
       .then((csvText) => {
         const parsed = Papa.parse(csvText, { header: true, skipEmptyLines: true });
         setDisasters(parsed.data);
+        setLoading(false);
       })
-      .catch((err) => setError(err.message));
+      .catch((err) => {
+        setError(err.message);
+        setLoading(false);
+      });
   }, []);
 
   const filteredDisasters = disasters.filter((d) => {
@@ -106,59 +111,66 @@ const DisasterMap = () => {
       {/* Error Message */}
       {error && <div className="text-red-500">Error loading data: {error}</div>}
 
+      {/* Loading Message */}
+      {loading && (
+        <div className="text-center text-lg font-semibold text-gray-700 my-4">
+          Loading disaster data...
+        </div>
+      )}
+
       {/* Map */}
-      <div ref={mapRef}>
-        <MapContainer
-          center={[10, 0]}
-          zoom={2}
-          scrollWheelZoom
-          className="h-[80vh] w-full rounded shadow"
-        >
-          <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-          <RegionFlyTo region={filters.region} />
+      {!loading && (
+        <div ref={mapRef}>
+          <MapContainer
+            center={[10, 0]}
+            zoom={2}
+            scrollWheelZoom
+            className="h-[80vh] w-full rounded shadow"
+          >
+            <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+            <RegionFlyTo region={filters.region} />
 
-          {filteredDisasters.map((disaster, idx) => {
-            const lat = parseFloat(disaster['Latitude']);
-            const lon = parseFloat(disaster['Longitude']);
-            if (!lat || !lon) return null;
+            {filteredDisasters.map((disaster, idx) => {
+              const lat = parseFloat(disaster['Latitude']);
+              const lon = parseFloat(disaster['Longitude']);
+              if (!lat || !lon) return null;
 
-            return (
-              <CircleMarker
-                key={idx}
-                center={[lat, lon]}
-                radius={6}
-                pathOptions={{ color: 'red', fillOpacity: 0.6 }}
-                eventHandlers={{
-                  mouseover: (e) => e.target.openPopup(),
-                  mouseout: (e) => e.target.closePopup(),
-                }}
-              >
-                <Popup>
-                  <strong>{disaster['Disaster Type']}</strong>
-                  <br />
-                  {disaster.Country}, {disaster.Region}
-                  <br />
-                  {disaster['Start Year']}
-                  <br />
-                  Affected: {disaster['Total Affected'] || 'N/A'}
-                  <br />
-                  Deaths: {disaster['Total Deaths'] || 'N/A'}
-                </Popup>
-              </CircleMarker>
-            );
-          })}
-        </MapContainer>
+              return (
+                <CircleMarker
+                  key={idx}
+                  center={[lat, lon]}
+                  radius={6}
+                  pathOptions={{ color: 'red', fillOpacity: 0.6 }}
+                  eventHandlers={{
+                    mouseover: (e) => e.target.openPopup(),
+                    mouseout: (e) => e.target.closePopup(),
+                  }}
+                >
+                  <Popup>
+                    <strong>{disaster['Disaster Type']}</strong>
+                    <br />
+                    {disaster.Country}, {disaster.Region}
+                    <br />
+                    {disaster['Start Year']}
+                    <br />
+                    Affected: {disaster['Total Affected'] || 'N/A'}
+                    <br />
+                    Deaths: {disaster['Total Deaths'] || 'N/A'}
+                  </Popup>
+                </CircleMarker>
+              );
+            })}
+          </MapContainer>
+        </div>
+      )}
+
+      {/* Legend */}
+      <div className="text-sm text-red-600 font-semibold mt-4">
+        <p>
+          <span className="inline-block w-4 h-4 bg-red-600 rounded-full mr-2"></span>
+          Disaster Locations (hover for details)
+        </p>
       </div>
-
-      {/* Legend */}
-      {/* Legend */}
-<div className="text-sm text-red-600 font-semibold mt-4">
-  <p>
-    <span className="inline-block w-4 h-4 bg-red-600 rounded-full mr-2"></span>
-    Disaster Locations (hover for details)
-  </p>
-</div>
-
     </div>
   );
 };

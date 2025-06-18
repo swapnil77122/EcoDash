@@ -4,7 +4,6 @@ import {
   Bar,
   XAxis,
   YAxis,
-  Tooltip,
   ResponsiveContainer,
   CartesianGrid,
 } from 'recharts';
@@ -17,10 +16,53 @@ const TARGET_COUNTRIES = [
 ];
 const AVAILABLE_YEARS = ['2021', '2020', '2019', '2018', '2017'];
 
+// Manual tooltip component
+const ManualTooltip = ({ hoverData, position }) => {
+  if (!hoverData || !position) return null;
+
+  const style = {
+    position: 'fixed',
+    left: position.x + 10,
+    top: position.y + 10,
+    background: 'white',
+    padding: '4px 8px',
+    borderRadius: '4px',
+    border: '1px solid #ccc',
+    fontSize: '12px',
+    pointerEvents: 'none',
+    zIndex: 1000,
+  };
+
+  return (
+    <div style={style}>
+      <strong>{hoverData.country}</strong>: {hoverData.co2} Mt
+    </div>
+  );
+};
+
+// Custom bar shape with hover detection
+const CustomBar = ({ x, y, width, height, fill, payload, onHover }) => {
+  return (
+    <rect
+      x={x}
+      y={y}
+      width={width}
+      height={height}
+      fill={fill}
+      onMouseMove={(e) => {
+        onHover(payload, { x: e.clientX, y: e.clientY });
+      }}
+      onMouseLeave={() => onHover(null, null)}
+    />
+  );
+};
+
 const CO2BarChart = () => {
   const [data, setData] = useState([]);
   const [rawData, setRawData] = useState([]);
   const [year, setYear] = useState('2021');
+  const [hoverData, setHoverData] = useState(null);
+  const [mousePos, setMousePos] = useState(null);
 
   useEffect(() => {
     fetch(CSV_URL)
@@ -55,7 +97,7 @@ const CO2BarChart = () => {
   }, [year, rawData]);
 
   return (
-    <div className="w-full mt-6 bg-white p-3 rounded shadow text-black text-sm">
+    <div className="w-full mt-6 bg-white p-3 rounded shadow text-black text-sm" style={{ userSelect: 'none' }}>
       <div className="flex items-center justify-between mb-3">
         <h2 className="text-base font-semibold">🌍 CO₂ Emitters – {year}</h2>
         <select
@@ -69,10 +111,12 @@ const CO2BarChart = () => {
         </select>
       </div>
 
+      <ManualTooltip hoverData={hoverData} position={mousePos} />
+
       {data.length === 0 ? (
         <div className="text-center text-gray-500 text-xs">Loading data...</div>
       ) : (
-        <ResponsiveContainer width="100%" height={350}>
+        <ResponsiveContainer width="100%" height={380}>
           <BarChart data={data}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis
@@ -83,11 +127,20 @@ const CO2BarChart = () => {
               unit=" Mt"
               tick={{ fill: '#000', fontSize: 10, fontWeight: 500 }}
             />
-            <Tooltip
-              contentStyle={{ fontSize: '10px' }}
-              labelStyle={{ fontSize: '10px' }}
+            <Bar
+              dataKey="co2"
+              fill="#22c55e"
+              shape={(props) => (
+                <CustomBar
+                  {...props}
+                  onHover={(d, pos) => {
+                    setHoverData(d);
+                    setMousePos(pos);
+                  }}
+                />
+              )}
+              isAnimationActive={false}
             />
-            <Bar dataKey="co2" fill="#22c55e" />
           </BarChart>
         </ResponsiveContainer>
       )}

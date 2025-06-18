@@ -3,15 +3,62 @@ import {
   Bar,
   XAxis,
   YAxis,
-  Tooltip,
-  Legend,
   ResponsiveContainer,
+  Legend,
 } from "recharts";
 import Papa from "papaparse";
-import { useEffect, useState, useImperativeHandle, forwardRef } from "react";
+import {
+  useEffect,
+  useState,
+  useImperativeHandle,
+  forwardRef,
+} from "react";
 
-const EnergyComparisonChart = forwardRef(({ refData }) => {
+// Manual tooltip near the mouse pointer
+const ManualTooltip = ({ hoverData, position }) => {
+  if (!hoverData || !position) return null;
+
+  const style = {
+    position: "fixed", // Use fixed so it's relative to the viewport
+    left: position.x + 10,
+    top: position.y + 10,
+    background: "white",
+    padding: "4px 8px",
+    borderRadius: "4px",
+    border: "1px solid #ccc",
+    fontSize: "12px",
+    pointerEvents: "none",
+    zIndex: 1000,
+  };
+
+  return (
+    <div style={style}>
+      <strong>{hoverData.type}</strong>: {hoverData.value} TWh
+    </div>
+  );
+};
+
+// Custom Bar to control hover
+const CustomBar = ({ x, y, width, height, fill, payload, onHover }) => {
+  return (
+    <rect
+      x={x}
+      y={y}
+      width={width}
+      height={height}
+      fill={fill}
+      onMouseMove={(e) => {
+        onHover(payload, { x: e.clientX, y: e.clientY });
+      }}
+      onMouseLeave={() => onHover(null, null)}
+    />
+  );
+};
+
+const EnergyComparisonChart = forwardRef(({ refData }, ref) => {
   const [chartData, setChartData] = useState([]);
+  const [hoverData, setHoverData] = useState(null);
+  const [mousePos, setMousePos] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -50,13 +97,19 @@ const EnergyComparisonChart = forwardRef(({ refData }) => {
     fetchData();
   }, []);
 
-  useImperativeHandle(refData, () => chartData, [chartData]);
+  useImperativeHandle(ref, () => chartData, [chartData]);
 
   return (
-    <div className="bg-white p-4 rounded-xl shadow text-black text-sm">
+    <div
+      className="relative bg-white p-4 rounded-xl shadow text-black text-sm"
+      style={{ userSelect: "none" }}
+    >
       <h3 className="text-base font-semibold mb-3">
         🔋 Total Renewable vs Non-Renewable Energy (TWh)
       </h3>
+
+      <ManualTooltip hoverData={hoverData} position={mousePos} />
+
       <ResponsiveContainer width="100%" height={300}>
         <BarChart data={chartData}>
           <XAxis
@@ -66,12 +119,21 @@ const EnergyComparisonChart = forwardRef(({ refData }) => {
           <YAxis
             tick={{ fill: "#000", fontSize: 10, fontWeight: 500 }}
           />
-          <Tooltip
-            contentStyle={{ fontSize: '10px' }}
-            labelStyle={{ fontSize: '10px' }}
+          <Legend wrapperStyle={{ fontSize: "10px" }} />
+          <Bar
+            dataKey="value"
+            fill="#3b82f6"
+            shape={(props) => (
+              <CustomBar
+                {...props}
+                onHover={(data, pos) => {
+                  setHoverData(data);
+                  setMousePos(pos);
+                }}
+              />
+            )}
+            isAnimationActive={false}
           />
-          <Legend wrapperStyle={{ fontSize: '10px' }} />
-          <Bar dataKey="value" fill="#3b82f6" />
         </BarChart>
       </ResponsiveContainer>
     </div>
