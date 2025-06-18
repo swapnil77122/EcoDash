@@ -14,12 +14,11 @@ import {
   forwardRef,
 } from "react";
 
-// Manual tooltip near the mouse pointer
+// Tooltip Component
 const ManualTooltip = ({ hoverData, position }) => {
   if (!hoverData || !position) return null;
-
   const style = {
-    position: "fixed", // Use fixed so it's relative to the viewport
+    position: "fixed",
     left: position.x + 10,
     top: position.y + 10,
     background: "white",
@@ -30,7 +29,6 @@ const ManualTooltip = ({ hoverData, position }) => {
     pointerEvents: "none",
     zIndex: 1000,
   };
-
   return (
     <div style={style}>
       <strong>{hoverData.type}</strong>: {hoverData.value} TWh
@@ -38,7 +36,7 @@ const ManualTooltip = ({ hoverData, position }) => {
   );
 };
 
-// Custom Bar to control hover
+// Custom Bar Shape
 const CustomBar = ({ x, y, width, height, fill, payload, onHover }) => {
   return (
     <rect
@@ -55,7 +53,8 @@ const CustomBar = ({ x, y, width, height, fill, payload, onHover }) => {
   );
 };
 
-const EnergyComparisonChart = forwardRef(({ refData }, ref) => {
+// Main Chart
+const EnergyComparisonChart = forwardRef(({ refData, onDataReady }, ref) => {
   const [chartData, setChartData] = useState([]);
   const [hoverData, setHoverData] = useState(null);
   const [mousePos, setMousePos] = useState(null);
@@ -64,7 +63,6 @@ const EnergyComparisonChart = forwardRef(({ refData }, ref) => {
     const fetchData = async () => {
       const renewableRes = await fetch("/data/1.csv");
       const renewableText = await renewableRes.text();
-
       const nonrenewableRes = await fetch("/data/2.csv");
       const nonrenewableText = await nonrenewableRes.text();
 
@@ -92,6 +90,8 @@ const EnergyComparisonChart = forwardRef(({ refData }, ref) => {
       ];
 
       setChartData(combined);
+      if (refData) refData.current = combined;
+      if (typeof onDataReady === "function") onDataReady(combined); // ✅ Important!
     };
 
     fetchData();
@@ -100,25 +100,13 @@ const EnergyComparisonChart = forwardRef(({ refData }, ref) => {
   useImperativeHandle(ref, () => chartData, [chartData]);
 
   return (
-    <div
-      className="relative bg-white p-4 rounded-xl shadow text-black text-sm"
-      style={{ userSelect: "none" }}
-    >
-      <h3 className="text-base font-semibold mb-3">
-        🔋 Total Renewable vs Non-Renewable Energy (TWh)
-      </h3>
-
+    <div className="relative bg-white p-4 rounded-xl shadow text-black text-sm" style={{ userSelect: "none" }}>
+      <h3 className="text-base font-semibold mb-3">🔋 Total Renewable vs Non-Renewable Energy (TWh)</h3>
       <ManualTooltip hoverData={hoverData} position={mousePos} />
-
       <ResponsiveContainer width="100%" height={300}>
         <BarChart data={chartData}>
-          <XAxis
-            dataKey="type"
-            tick={{ fill: "#000", fontSize: 10, fontWeight: 500 }}
-          />
-          <YAxis
-            tick={{ fill: "#000", fontSize: 10, fontWeight: 500 }}
-          />
+          <XAxis dataKey="type" tick={{ fill: "#000", fontSize: 10, fontWeight: 500 }} />
+          <YAxis tick={{ fill: "#000", fontSize: 10, fontWeight: 500 }} />
           <Legend wrapperStyle={{ fontSize: "10px" }} />
           <Bar
             dataKey="value"

@@ -112,7 +112,7 @@ const Overview = () => {
         </CardSection>
 
         <CardSection title="🌍 Top Emitters">
-          <div className="w-full h-[450px]">
+          <div className="w-full h-[480px]">
             <CO2BarChart />
           </div>
         </CardSection>
