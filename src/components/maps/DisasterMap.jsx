@@ -26,7 +26,6 @@ const RegionFlyTo = ({ region }) => {
       map.flyTo([10, 0], 2, { duration: 1.5 });
     }
   }, [region, map]);
-
   return null;
 };
 
