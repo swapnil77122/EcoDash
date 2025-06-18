@@ -37,8 +37,7 @@ const SeaLevel = () => {
         </p>
       </Card>
 
-      <div className="flex justify-between items-center">
-        <h2 className="text-sm font-semibold text-black">📉 Sea Level Trends</h2>
+      <div className="flex justify-end items-center">
         <button
           onClick={handleDownloadPDF}
           className="bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700"
