@@ -13,8 +13,7 @@ import useCO2EmissionData from "../../hooks/useCO2EmissionData";
 
 const featuredCountries = [
   "Nepal", "North Korea", "Mongolia", "Morocco", "Malawi",
-  "Kazakhstan", "Georgia", "Bhutan", "Ghana", "Honduras",
-  "Republic of the Congo", "Romania", "Rwanda", "San Marino", "Senegal",
+  "Kazakhstan", "Georgia", "Bhutan", "Ghana", "Honduras", "Romania", "Rwanda", "Senegal",
   "Serbia", "Seychelles", "Sierra Leone", "Slovakia", "Slovenia",
   "Solomon Islands", "Somalia", "Sri Lanka", "Sudan", "Suriname",
   "Syria", "Tajikistan", "Tanzania", "Togo", "Trinidad and Tobago",
