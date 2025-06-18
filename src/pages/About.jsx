@@ -21,7 +21,7 @@ const About = () => {
           <Card className="!border-none !rounded-none">
             <CardContent className="p-4">
               <p>
-                This dashboard provides an interactive, data-driven overview of climate and environmental trends across the globe. It empowers users with visual tools to understand complex issues like rising sea levels, CO₂ emissions, energy sources, and natural disasters.It also has map analysis  and also we can have interactive maps
+                This dashboard provides an interactive, data-driven overview of climate and environmental trends across the globe. It empowers users with visual tools to understand complex issues like rising sea levels, CO₂ emissions, energy sources, and natural disasters.It also has map analysis  and also we can have interactive map
               </p>
             </CardContent>
           </Card>
