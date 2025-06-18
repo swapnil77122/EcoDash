@@ -79,7 +79,7 @@ export default function Emissions() {
 
     autoTable(pdf, {
       startY: 130,
-      head: [['Country', 'CO₂ (Mt)']],
+      head: [['Country', 'CO2 (Mt)']],
       body: rows.slice(0, 25),
       styles: { fontSize: 10 },
       headStyles: { fillColor: [22, 160, 133] },
