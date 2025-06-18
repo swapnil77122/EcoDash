@@ -64,28 +64,30 @@ const CO2Map = () => {
   return (
     <div className="space-y-4">
       {/* Filters side by side */}
-      <div className="flex flex-row flex-wrap gap-4 justify-start items-center">
-        <select
-          value={selectedYear}
-          onChange={(e) => setSelectedYear(e.target.value)}
-          className="p-2 border rounded-md shadow"
-        >
-          {years.map((y) => (
-            <option key={y} value={y}>{y}</option>
-          ))}
-        </select>
+      {/* Filters side by side */}
+<div className="flex flex-row flex-wrap gap-2 justify-start items-center text-sm">
+  <select
+    value={selectedYear}
+    onChange={(e) => setSelectedYear(e.target.value)}
+    className="px-2 py-1 border rounded-md shadow text-sm"
+  >
+    {years.map((y) => (
+      <option key={y} value={y}>{y}</option>
+    ))}
+  </select>
 
-        <select
-          value={selectedCountry}
-          onChange={(e) => setSelectedCountry(e.target.value)}
-          className="p-2 border rounded-md shadow"
-        >
-          <option value="">All</option>
-          {featuredCountries.map((c) => (
-            <option key={c} value={c}>{c}</option>
-          ))}
-        </select>
-      </div>
+  <select
+    value={selectedCountry}
+    onChange={(e) => setSelectedCountry(e.target.value)}
+    className="px-2 py-1 border rounded-md shadow text-sm w-48"
+  >
+    <option value="">All</option>
+    {featuredCountries.map((c) => (
+      <option key={c} value={c}>{c}</option>
+    ))}
+  </select>
+</div>
+
 
       {/* Map */}
       <MapContainer
