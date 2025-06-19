@@ -91,7 +91,7 @@ const EnergyComparisonChart = forwardRef(({ refData, onDataReady }, ref) => {
 
       setChartData(combined);
       if (refData) refData.current = combined;
-      if (typeof onDataReady === "function") onDataReady(combined); // ✅ Important!
+      if (typeof onDataReady === "function") onDataReady(combined);
     };
 
     fetchData();
