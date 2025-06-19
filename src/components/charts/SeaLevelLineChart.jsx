@@ -11,18 +11,18 @@ import {
 
 const SeaLevelLineChart = forwardRef(({ refData }) => {
   const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(true); // ✅ loading state
+  const [loading, setLoading] = useState(true); 
 
   useEffect(() => {
     const years = Array.from({ length: 50 }, (_, i) => 1970 + i);
     const fakeData = years.map((year, i) => ({
       year,
-      level: parseFloat((i * 3.3 + Math.random()).toFixed(2)), // mm/year
+      level: parseFloat((i * 3.3 + Math.random()).toFixed(2)), 
     }));
 
-    setTimeout(() => { // simulate slight delay for realism
+    setTimeout(() => { 
       setData(fakeData);
-      setLoading(false); // ✅ stop loading
+      setLoading(false); 
     }, 500);
   }, []);
 
