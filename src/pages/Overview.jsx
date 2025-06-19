@@ -11,7 +11,7 @@ const citySuggestions = [
   "Delhi", "Mumbai", "Bangalore", "Chennai", "Kolkata",
   "Hyderabad", "Pune", "Ahmedabad", "Jaipur", "Surat",
   "Lucknow", "Kanpur", "Nagpur", "Bhopal",
-  "Ludhiana", "Agra",
+  "Ludhiana", "Agra", 
   "Coimbatore", "Chandigarh",
 
   // International - Major Cities
