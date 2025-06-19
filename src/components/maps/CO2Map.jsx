@@ -7,7 +7,6 @@ import {
   useMap,
 } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
-import L from "leaflet";
 import useCountryCoords from "../../hooks/useCountryCoords";
 import useCO2EmissionData from "../../hooks/useCO2EmissionData";
 
@@ -33,7 +32,7 @@ const getColor = (co2) => {
                             "#FFEDA0";
 };
 
-// Component to zoom to selected country
+// Zoom to country when selected
 const CountryZoom = ({ selectedCountry, coordsMap }) => {
   const map = useMap();
 
@@ -42,11 +41,32 @@ const CountryZoom = ({ selectedCountry, coordsMap }) => {
       const { lat, lng } = coordsMap[selectedCountry];
       map.flyTo([lat, lng], 5);
     } else {
-      map.flyTo([20, 0], 2); // default global view
+      map.flyTo([20, 0], 2);
     }
   }, [selectedCountry, coordsMap, map]);
 
   return null;
+};
+
+// Show current zoom level
+const ZoomLevelDisplay = () => {
+  const map = useMap();
+  const [zoom, setZoom] = useState(map.getZoom());
+
+  useEffect(() => {
+    const updateZoom = () => setZoom(map.getZoom());
+    map.on("zoomend", updateZoom);
+    return () => map.off("zoomend", updateZoom);
+  }, [map]);
+
+  return (
+    <div
+      className="absolute bottom-2 left-2 bg-white text-black px-2 py-1 rounded text-xs shadow"
+      style={{ zIndex: 1000 }}
+    >
+      🔍 Zoom: {zoom}
+    </div>
+  );
 };
 
 const CO2Map = () => {
@@ -56,43 +76,50 @@ const CO2Map = () => {
   const [selectedYear, setSelectedYear] = useState("2020");
   const [selectedCountry, setSelectedCountry] = useState("");
 
-  const filteredEmissions = emissions.filter(
-    (e) => e.Year === selectedYear
-  );
+  const filteredEmissions = emissions.filter((e) => e.Year === selectedYear);
 
   return (
     <div className="space-y-4">
-      {/* Filters side by side */}
-      {/* Filters side by side */}
-<div className="flex flex-row flex-wrap gap-2 justify-start items-center text-sm">
-  <select
-    value={selectedYear}
-    onChange={(e) => setSelectedYear(e.target.value)}
-    className="px-2 py-1 border rounded-md shadow text-sm"
-  >
-    {years.map((y) => (
-      <option key={y} value={y}>{y}</option>
-    ))}
-  </select>
+      {/* Style for smaller zoom controls */}
+      <style>
+        {`
+          .leaflet-control-zoom {
+            transform: scale(0.7);
+            transform-origin: bottom left;
+          }
+        `}
+      </style>
 
-  <select
-    value={selectedCountry}
-    onChange={(e) => setSelectedCountry(e.target.value)}
-    className="px-2 py-1 border rounded-md shadow text-sm w-48"
-  >
-    <option value="">All</option>
-    {featuredCountries.map((c) => (
-      <option key={c} value={c}>{c}</option>
-    ))}
-  </select>
-</div>
+      {/* Filters */}
+      <div className="flex flex-row flex-wrap gap-2 justify-start items-center text-sm">
+        <select
+          value={selectedYear}
+          onChange={(e) => setSelectedYear(e.target.value)}
+          className="px-2 py-1 border rounded-md shadow text-sm"
+        >
+          {years.map((y) => (
+            <option key={y} value={y}>{y}</option>
+          ))}
+        </select>
 
+        <select
+          value={selectedCountry}
+          onChange={(e) => setSelectedCountry(e.target.value)}
+          className="px-2 py-1 border rounded-md shadow text-sm w-48"
+        >
+          <option value="">All</option>
+          {featuredCountries.map((c) => (
+            <option key={c} value={c}>{c}</option>
+          ))}
+        </select>
+      </div>
 
       {/* Map */}
       <MapContainer
         key={`${selectedYear}-${selectedCountry}`}
         center={[20, 0]}
         zoom={2}
+        className="relative"
         style={{ height: "450px", width: "100%" }}
       >
         <TileLayer
@@ -101,6 +128,7 @@ const CO2Map = () => {
         />
 
         <CountryZoom selectedCountry={selectedCountry} coordsMap={coordsMap} />
+        <ZoomLevelDisplay />
 
         {filteredEmissions.map((row, idx) => {
           const co2 = parseFloat(row["CO2 emission (Tons)"]);

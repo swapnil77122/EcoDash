@@ -21,15 +21,15 @@ const About = () => {
           <Card className="!border-none !rounded-none">
             <CardContent className="p-4">
               <p>
-                This dashboard provides an interactive, data-driven overview of climate and environmental trends across the globe. It empowers users with visual tools to understand complex issues like rising sea levels, CO₂ emissions, energy sources, and natural disasters.It also has map analysis  and also we can have interactive map
+                This dashboard provides an interactive, data-driven overview of climate and environmental trends across the globe. It empowers users with visual tools to understand complex issues like rising sea levels, CO₂ emissions, energy sources, and natural disasters. It also has map analysis and interactive maps.
               </p>
             </CardContent>
           </Card>
         </div>
 
         {/* Key Features */}
-        <div className="border border-green-200">
-          <div className="bg-green-600 text-white text-center py-2 font-semibold">
+        <div className="border border-blue-200">
+          <div className="bg-blue-700 text-white text-center py-2 font-semibold">
             🧩 Key Features
           </div>
           <Card className="!border-none !rounded-none">
@@ -46,8 +46,8 @@ const About = () => {
         </div>
 
         {/* Technology Stack */}
-        <div className="border border-purple-200">
-          <div className="bg-purple-600 text-white text-center py-2 font-semibold">
+        <div className="border border-blue-200">
+          <div className="bg-blue-700 text-white text-center py-2 font-semibold">
             🛠️ Technology Stack
           </div>
           <Card className="!border-none !rounded-none">
@@ -64,8 +64,8 @@ const About = () => {
         </div>
 
         {/* Intended Users */}
-        <div className="border border-yellow-200">
-          <div className="bg-yellow-500 text-white text-center py-2 font-semibold">
+        <div className="border border-blue-200">
+          <div className="bg-blue-700 text-white text-center py-2 font-semibold">
             👤 Intended Users
           </div>
           <Card className="!border-none !rounded-none">
@@ -84,8 +84,8 @@ const About = () => {
       </section>
 
       {/* Real-World Impact - full width */}
-      <div className="border border-gray-300">
-        <div className="bg-gray-700 text-white text-center py-2 font-semibold">
+      <div className="border border-blue-200">
+        <div className="bg-blue-700 text-white text-center py-2 font-semibold">
           🌍 Real-World Impact
         </div>
         <Card className="!border-none !rounded-none">

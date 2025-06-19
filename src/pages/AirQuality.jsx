@@ -1,7 +1,7 @@
 // src/pages/AirQuality.jsx
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { fetchAQIByCity } from "../services/waqi";
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import jsPDF from "jspdf";
@@ -15,21 +15,58 @@ L.Icon.Default.mergeOptions({
   shadowUrl: "https://unpkg.com/leaflet@1.9.3/dist/images/marker-shadow.png",
 });
 
+// Suggestion List
+const citySuggestions = [
+  "Delhi", "Mumbai", "Bangalore", "Chennai", "Kolkata",
+  "Hyderabad", "Pune", "Ahmedabad", "Jaipur", "Surat",
+  "Lucknow", "Kanpur", "Nagpur", "Indore", "Bhopal",
+  "Visakhapatnam", "Thane", "Patna", "Ludhiana", "Agra",
+  "Nashik", "Vadodara", "Varanasi", "Amritsar", "Ranchi",
+  "New York", "Los Angeles", "Chicago", "San Francisco", "London",
+  "Paris", "Berlin", "Tokyo", "Osaka", "Seoul",
+  "Beijing", "Shanghai", "Hong Kong", "Dubai", "Singapore",
+  "Bangkok", "Kuala Lumpur", "Toronto", "Vancouver", "Sydney",
+  "Melbourne", "São Paulo", "Mexico City", "Moscow", "Istanbul"
+];
+
+// Component to show zoom level
+const ZoomLevelDisplay = () => {
+  const map = useMap();
+  const [zoom, setZoom] = useState(map.getZoom());
+
+  useEffect(() => {
+    const handleZoom = () => setZoom(map.getZoom());
+    map.on("zoomend", handleZoom);
+    return () => map.off("zoomend", handleZoom);
+  }, [map]);
+
+  return (
+    <div
+      className="absolute bottom-2 left-2 bg-white text-black px-2 py-1 rounded text-xs shadow z-[1000]"
+      style={{ fontSize: "12px" }}
+    >
+      🔍 Zoom: {zoom}
+    </div>
+  );
+};
+
 const AirQuality = () => {
   const [city, setCity] = useState("");
   const [aqiData, setAqiData] = useState(null);
   const [position, setPosition] = useState([20, 0]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [suggestions, setSuggestions] = useState([]);
   const exportRef = useRef(null);
 
-  const handleSearch = async () => {
+  const handleSearch = async (cityName = city) => {
     setLoading(true);
     setError("");
     setAqiData(null);
+    setSuggestions([]);
 
     try {
-      const data = await fetchAQIByCity(city);
+      const data = await fetchAQIByCity(cityName);
       setAqiData(data);
       setPosition(data.coords);
     } catch (err) {
@@ -57,21 +94,56 @@ const AirQuality = () => {
     }
   };
 
+  const handleInputChange = (e) => {
+    const value = e.target.value;
+    setCity(value);
+
+    if (value.trim().length > 0) {
+      const filtered = citySuggestions.filter((c) =>
+        c.toLowerCase().startsWith(value.toLowerCase())
+      );
+      setSuggestions(filtered);
+    } else {
+      setSuggestions([]);
+    }
+  };
+
+  const handleSuggestionClick = (selectedCity) => {
+    setCity(selectedCity);
+    setSuggestions([]);
+    handleSearch(selectedCity);
+  };
+
   return (
     <div className="min-h-screen p-4 bg-white text-black text-sm">
       <h2 className="text-xl font-bold mb-4">🌍 Global Air Quality</h2>
 
-      <div className="flex gap-2 mb-4">
-        <input
-          type="text"
-          placeholder="Enter city name"
-          value={city}
-          onChange={(e) => setCity(e.target.value)}
-          className="p-2 border border-gray-300 rounded w-full text-sm"
-        />
+      <div className="flex flex-col md:flex-row gap-2 mb-4 relative w-full md:w-[60%]">
+        <div className="relative w-full">
+          <input
+            type="text"
+            placeholder="Enter city name"
+            value={city}
+            onChange={handleInputChange}
+            className="p-2 border border-gray-300 rounded w-full text-sm"
+          />
+          {suggestions.length > 0 && (
+            <ul className="absolute z-10 bg-white border border-gray-300 rounded w-full mt-1 shadow text-sm max-h-48 overflow-y-auto">
+              {suggestions.map((s, i) => (
+                <li
+                  key={i}
+                  className="px-3 py-1 cursor-pointer hover:bg-blue-100"
+                  onClick={() => handleSuggestionClick(s)}
+                >
+                  {s}
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
         <button
-          onClick={handleSearch}
-          className="px-4 py-2 bg-blue-600 text-white rounded text-sm"
+          onClick={() => handleSearch()}
+          className="px-4 py-2 bg-blue-600 text-white rounded text-sm min-w-[100px]"
           disabled={loading}
         >
           {loading ? "Loading..." : "Search"}
@@ -94,6 +166,7 @@ const AirQuality = () => {
               center={position}
               zoom={aqiData ? 10 : 2}
               scrollWheelZoom={true}
+              className="relative"
               style={{ height: "400px", width: "100%" }}
             >
               <TileLayer
@@ -109,6 +182,19 @@ const AirQuality = () => {
                   </div>
                 </Popup>
               </Marker>
+
+              {/* Zoom Level Display */}
+              <ZoomLevelDisplay />
+
+              {/* Zoom Control Scaling */}
+              <style>
+                {`
+                  .leaflet-control-zoom {
+                    transform: scale(0.7);
+                    transform-origin: bottom left;
+                  }
+                `}
+              </style>
             </MapContainer>
           </div>
 
@@ -119,7 +205,11 @@ const AirQuality = () => {
             📄 Download PDF
           </button>
         </>
-      ) : null}
+      ) : (
+        loading && (
+          <p className="text-gray-600 italic mt-2">Fetching AQI data...</p>
+        )
+      )}
     </div>
   );
 };

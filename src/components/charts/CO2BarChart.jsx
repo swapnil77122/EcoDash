@@ -97,7 +97,7 @@ const CO2BarChart = () => {
   }, [year, rawData]);
 
   return (
-    <div className="w-full mt-6 bg-white p-3 rounded shadow text-black text-sm" style={{ userSelect: 'none' }}>
+    <div className="w-full mt-2 bg-white p-3 rounded shadow text-black text-sm" style={{ userSelect: 'none' }}>
       <div className="flex items-center justify-between mb-3">
         <h2 className="text-base font-semibold">🌍 CO₂ Emitters – {year}</h2>
         <select
@@ -116,7 +116,7 @@ const CO2BarChart = () => {
       {data.length === 0 ? (
         <div className="text-center text-gray-500 text-xs">Loading data...</div>
       ) : (
-        <ResponsiveContainer width="100%" height={380}>
+        <ResponsiveContainer width="100%" height={399}>
           <BarChart data={data}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis

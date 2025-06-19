@@ -26,17 +26,17 @@ const Energy = () => {
   };
 
   return (
-    <div className="p-4 space-y-6 bg-white text-black text-sm min-h-screen">
+    <div className="p-2 space-y-3 bg-white text-black text-sm">
       <div className="flex justify-between items-center">
-        <h2 className="text-base font-semibold">⚡ Energy Overview</h2>
+        <h2 className="text-sm font-semibold">⚡ Energy Overview</h2>
       </div>
 
       <div ref={chartRef}>
         <EnergyComparisonChart refData={dataRef} onDataReady={handleDataReady} />
       </div>
 
-      <div className="bg-gray-100 p-4 rounded shadow text-sm">
-        <h4 className="text-base font-semibold mb-2">🔍 Analysis</h4>
+      <div className="bg-gray-100 p-2 rounded shadow text-sm">
+        <h4 className="text-sm font-semibold mb-1">🔍 Analysis</h4>
         <p>{analysis || "Loading analysis based on current data..."}</p>
       </div>
     </div>

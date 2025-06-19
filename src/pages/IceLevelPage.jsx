@@ -57,7 +57,7 @@ const IceLevelPage = () => {
     if (active && payload && payload.length) {
       return (
         <div className="bg-white p-2 rounded shadow text-black text-xs">
-          <p className="font-semibold text-xs">📅 Date: {label}</p>
+          <p className="font-semibold">📅 Date: {label}</p>
           {payload.map((entry, i) => (
             <p key={i} className="text-xs" style={{ color: entry.color }}>
               {entry.name}: {entry.value.toLocaleString()} Gt
@@ -70,17 +70,17 @@ const IceLevelPage = () => {
   };
 
   return (
-    <div className="w-full min-h-screen bg-white text-black p-6 text-sm">
-      <h2 className="text-base font-semibold mb-4 text-black">
+    <div className="w-full min-h-screen bg-white text-black p-3 text-xs">
+      <h2 className="text-sm font-semibold mb-3 text-black">
         🧊 Ice Sheet Mass Change
       </h2>
 
-      <div className="mb-4">
-        <label className="font-medium mr-2 text-black text-sm">Filter by Year:</label>
+      <div className="mb-3">
+        <label className="font-medium mr-2 text-black">Filter by Year:</label>
         <select
           value={filteredYear}
           onChange={(e) => setFilteredYear(e.target.value)}
-          className="text-black border border-black px-2 py-1 rounded text-sm"
+          className="text-black border border-black px-2 py-1 rounded text-xs"
         >
           <option value="All">All</option>
           {years.map((year) => (
@@ -91,48 +91,48 @@ const IceLevelPage = () => {
         </select>
       </div>
 
-      <div className="h-[75vh] bg-gray-100 rounded-lg shadow-lg p-4">
+      <div className="h-[65vh] bg-gray-100 rounded shadow p-3">
         <ResponsiveContainer width="100%" height="100%">
           <LineChart data={filteredData}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis
               dataKey="Day"
               stroke="#000"
-              tick={{ fontSize: 10 }}
+              tick={{ fontSize: 9 }}
             />
             <YAxis
               unit=" Gt"
               stroke="#000"
-              tick={{ fontSize: 10 }}
+              tick={{ fontSize: 9 }}
               label={{
                 value: "Mass Change (Gt)",
                 angle: -90,
                 position: "insideLeft",
                 offset: -10,
                 fill: "#000",
-                fontSize: 10,
+                fontSize: 9,
                 fontWeight: "bold"
               }}
             />
             <Tooltip content={<CustomTooltip />} />
-            <Legend wrapperStyle={{ fontSize: 10 }} />
+            <Legend wrapperStyle={{ fontSize: 9 }} />
             <Line
               type="monotone"
               dataKey="Antarctica"
               name="Antarctica"
               stroke="#3b82f6"
-              strokeWidth={2}
-              dot={{ r: 2 }}
-              activeDot={{ r: 4 }}
+              strokeWidth={1.8}
+              dot={{ r: 1.5 }}
+              activeDot={{ r: 3 }}
             />
             <Line
               type="monotone"
               dataKey="Greenland"
               name="Greenland"
               stroke="#10b981"
-              strokeWidth={2}
-              dot={{ r: 2 }}
-              activeDot={{ r: 4 }}
+              strokeWidth={1.8}
+              dot={{ r: 1.5 }}
+              activeDot={{ r: 3 }}
             />
           </LineChart>
         </ResponsiveContainer>

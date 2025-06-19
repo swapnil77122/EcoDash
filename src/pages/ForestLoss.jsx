@@ -12,7 +12,7 @@ import {
 
 const years = Array.from({ length: 11 }, (_, i) => 2010 + i);
 
-// Manual Tooltip Component
+// Manual Tooltip
 const ManualTooltip = ({ hoverData, position }) => {
   if (!hoverData || !position) return null;
 
@@ -24,7 +24,7 @@ const ManualTooltip = ({ hoverData, position }) => {
     padding: '4px 8px',
     borderRadius: '4px',
     border: '1px solid #ccc',
-    fontSize: '12px',
+    fontSize: '11px',
     pointerEvents: 'none',
     zIndex: 1000,
   };
@@ -36,22 +36,18 @@ const ManualTooltip = ({ hoverData, position }) => {
   );
 };
 
-// Custom Bar Shape
-const CustomBar = ({ x, y, width, height, fill, payload, onHover }) => {
-  return (
-    <rect
-      x={x}
-      y={y}
-      width={width}
-      height={height}
-      fill={fill}
-      onMouseMove={(e) =>
-        onHover(payload, { x: e.clientX, y: e.clientY })
-      }
-      onMouseLeave={() => onHover(null, null)}
-    />
-  );
-};
+// Custom Bar
+const CustomBar = ({ x, y, width, height, fill, payload, onHover }) => (
+  <rect
+    x={x}
+    y={y}
+    width={width}
+    height={height}
+    fill={fill}
+    onMouseMove={(e) => onHover(payload, { x: e.clientX, y: e.clientY })}
+    onMouseLeave={() => onHover(null, null)}
+  />
+);
 
 const ForestLoss = () => {
   const [allData, setAllData] = useState([]);
@@ -105,15 +101,15 @@ const ForestLoss = () => {
   }, [allData, selectedYear]);
 
   return (
-    <div className="p-4 bg-white text-black text-sm min-h-screen">
-      <h2 className="text-base font-semibold mb-4">
+    <div className="p-2 bg-white text-black text-xs min-h-[400px]">
+      <h2 className="text-sm font-semibold mb-2">
         🌳 Forest Area Loss ({selectedYear})
       </h2>
 
-      <div className="mb-4">
-        <label className="mr-2 font-medium">Select Year:</label>
+      <div className="mb-2">
+        <label className="mr-2 font-medium">Year:</label>
         <select
-          className="p-1 rounded shadow border border-black text-sm"
+          className="p-1 rounded border border-gray-400 text-xs"
           value={selectedYear}
           onChange={(e) => setSelectedYear(parseInt(e.target.value))}
         >
@@ -128,46 +124,39 @@ const ForestLoss = () => {
       <ManualTooltip hoverData={hoverData} position={mousePos} />
 
       {chartData.length === 0 ? (
-        <p>Loading or no valid data found...</p>
+        <p className="text-xs text-gray-500">Loading or no valid data found...</p>
       ) : (
-        <div className="bg-white p-4 rounded shadow text-sm">
-          <ResponsiveContainer width="100%" height={500}>
+        <div className="bg-white p-2 rounded border border-gray-200">
+          <ResponsiveContainer width="100%" height={400}>
             <BarChart
               data={chartData}
-              margin={{ top: 20, right: 30, left: 40, bottom: 100 }}
+              margin={{ top: 10, right: 20, left: 20, bottom: 80 }}
             >
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis
                 dataKey="country"
-                type="category"
-                interval={0}
                 tick={{
                   fill: '#000',
-                  fontWeight: 'normal',
-                  fontSize: 10,
-                  angle: -35,
+                  fontSize: 9,
+                  angle: -30,
                   textAnchor: 'end',
                 }}
-                height={80}
+                interval={0}
+                height={60}
               />
               <YAxis
-                type="number"
-                tick={{
-                  fill: '#000',
-                  fontWeight: 'normal',
-                  fontSize: 10,
-                }}
+                tick={{ fill: '#000', fontSize: 9 }}
                 label={{
-                  value: 'Forest Loss (ha)',
+                  value: 'Loss (ha)',
                   angle: -90,
                   position: 'insideLeft',
-                  dx: -40,
+                  dx: -10,
+                  fontSize: 10,
                   fill: '#000',
                   fontWeight: 'bold',
-                  fontSize: 10,
                 }}
               />
-              <Legend wrapperStyle={{ fontSize: 10 }} />
+              <Legend wrapperStyle={{ fontSize: 9 }} />
               <Bar
                 dataKey="loss"
                 fill="#228B22"

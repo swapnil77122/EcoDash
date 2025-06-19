@@ -1,4 +1,4 @@
-import { MapContainer, TileLayer, CircleMarker, Popup, useMap } from 'react-leaflet';
+import { MapContainer, TileLayer, CircleMarker, useMap } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import { useEffect, useRef, useState } from 'react';
 import Papa from 'papaparse';
@@ -18,7 +18,6 @@ const regionCoords = {
 
 const RegionFlyTo = ({ region }) => {
   const map = useMap();
-
   useEffect(() => {
     if (region !== 'All' && regionCoords[region]) {
       map.flyTo(regionCoords[region], 4, { duration: 1.5 });
@@ -29,18 +28,34 @@ const RegionFlyTo = ({ region }) => {
   return null;
 };
 
+const ZoomLevelDisplay = () => {
+  const map = useMap();
+  const [zoom, setZoom] = useState(map.getZoom());
+
+  useEffect(() => {
+    const handleZoom = () => setZoom(map.getZoom());
+    map.on('zoomend', handleZoom);
+    return () => map.off('zoomend', handleZoom);
+  }, [map]);
+
+  return (
+    <div
+      className="absolute bottom-2 left-2 bg-white text-black px-2 py-1 rounded text-xs shadow"
+      style={{ zIndex: 1000 }}
+    >
+      🔍 Zoom: {zoom}
+    </div>
+  );
+};
+
 const DisasterMap = () => {
   const [disasters, setDisasters] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [filters, setFilters] = useState({
-    year: 'All',
-    region: 'All',
-  });
+  const [filters, setFilters] = useState({ year: 'All', region: 'All' });
+  const [hoveredDisaster, setHoveredDisaster] = useState(null);
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const mapRef = useRef();
-
-  const years = [...new Set(disasters.map((d) => d['Start Year']))].filter(Boolean);
-  const regions = [...new Set(disasters.map((d) => d['Region']))].filter(Boolean);
 
   useEffect(() => {
     fetch('/data/disasters.csv')
@@ -56,6 +71,9 @@ const DisasterMap = () => {
       });
   }, []);
 
+  const years = [...new Set(disasters.map((d) => d['Start Year']))].filter(Boolean);
+  const regions = [...new Set(disasters.map((d) => d['Region']))].filter(Boolean);
+
   const filteredDisasters = disasters.filter((d) => {
     return (
       (filters.year === 'All' || d['Start Year'] === filters.year) &&
@@ -69,9 +87,18 @@ const DisasterMap = () => {
 
   return (
     <div>
-      {/* Filter Section */}
+      {/* Zoom Style */}
+      <style>
+        {`
+          .leaflet-control-zoom {
+            transform: scale(0.7);
+            transform-origin: bottom left;
+          }
+        `}
+      </style>
+
+      {/* Filters */}
       <div className="flex flex-wrap items-center gap-6 mb-4 text-black">
-        {/* Year Filter */}
         <div className="flex items-center gap-2">
           <span className="font-semibold">Year</span>
           <select
@@ -89,8 +116,7 @@ const DisasterMap = () => {
           </select>
         </div>
 
-        {/* Region Filter */}
-        <div className="flex items-center gap-2 text-black">
+        <div className="flex items-center gap-2">
           <span className="font-semibold">Region</span>
           <select
             name="region"
@@ -108,10 +134,8 @@ const DisasterMap = () => {
         </div>
       </div>
 
-      {/* Error Message */}
-      {error && <div className="text-red-500">Error loading data: {error}</div>}
-
-      {/* Loading Message */}
+      {/* Error / Loading */}
+      {error && <div className="text-red-500">Error: {error}</div>}
       {loading && (
         <div className="text-center text-lg font-semibold text-gray-700 my-4">
           Loading disaster data...
@@ -125,10 +149,11 @@ const DisasterMap = () => {
             center={[10, 0]}
             zoom={2}
             scrollWheelZoom
-            className="h-[80vh] w-full rounded shadow"
+            className="h-[70vh] w-full rounded shadow relative"
           >
             <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
             <RegionFlyTo region={filters.region} />
+            <ZoomLevelDisplay />
 
             {filteredDisasters.map((disaster, idx) => {
               const lat = parseFloat(disaster['Latitude']);
@@ -140,36 +165,89 @@ const DisasterMap = () => {
                   key={idx}
                   center={[lat, lon]}
                   radius={6}
-                  pathOptions={{ color: 'red', fillOpacity: 0.6 }}
-                  eventHandlers={{
-                    mouseover: (e) => e.target.openPopup(),
-                    mouseout: (e) => e.target.closePopup(),
+                  pathOptions={{
+                    color: '#ff0000',
+                    fillColor: '#ff4d4d',
+                    fillOpacity: 0.6,
+                    weight: 2,
                   }}
-                >
-                  <Popup>
-                    <strong>{disaster['Disaster Type']}</strong>
-                    <br />
-                    {disaster.Country}, {disaster.Region}
-                    <br />
-                    {disaster['Start Year']}
-                    <br />
-                    Affected: {disaster['Total Affected'] || 'N/A'}
-                    <br />
-                    Deaths: {disaster['Total Deaths'] || 'N/A'}
-                  </Popup>
-                </CircleMarker>
+                  eventHandlers={{
+                    mouseover: (e) => {
+                      setHoveredDisaster(disaster);
+                      setMousePos({ x: e.originalEvent.clientX, y: e.originalEvent.clientY });
+                    },
+                    mousemove: (e) => {
+                      setMousePos({ x: e.originalEvent.clientX, y: e.originalEvent.clientY });
+                    },
+                    mouseout: () => setHoveredDisaster(null),
+                  }}
+                />
               );
             })}
           </MapContainer>
         </div>
       )}
 
+      {/* Styled Table Tooltip */}
+      {hoveredDisaster && (
+        <div
+          className="fixed bg-white text-xs border border-gray-400 rounded shadow-lg z-[1000]"
+          style={{
+            top: `${mousePos.y + 12}px`,
+            left: `${mousePos.x + 12}px`,
+            pointerEvents: 'none',
+          }}
+        >
+          <table className="table-fixed border-collapse border border-gray-400 w-max text-[11px]">
+            <thead>
+              <tr className="bg-gray-100">
+                <th className="border border-gray-400 px-2 py-1">Field</th>
+                <th className="border border-gray-400 px-2 py-1">Value</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="border border-gray-300 px-2 py-1">Disaster</td>
+                <td className="border border-gray-300 px-2 py-1">{hoveredDisaster['Disaster Type']}</td>
+              </tr>
+              <tr>
+                <td className="border border-gray-300 px-2 py-1">Country</td>
+                <td className="border border-gray-300 px-2 py-1">{hoveredDisaster['Country']}</td>
+              </tr>
+              <tr>
+                <td className="border border-gray-300 px-2 py-1">Region</td>
+                <td className="border border-gray-300 px-2 py-1">{hoveredDisaster['Region']}</td>
+              </tr>
+              <tr>
+                <td className="border border-gray-300 px-2 py-1">Year</td>
+                <td className="border border-gray-300 px-2 py-1">{hoveredDisaster['Start Year']}</td>
+              </tr>
+              <tr>
+                <td className="border border-gray-300 px-2 py-1">Affected</td>
+                <td className="border border-gray-300 px-2 py-1">{hoveredDisaster['Total Affected'] || 'N/A'}</td>
+              </tr>
+              <tr>
+                <td className="border border-gray-300 px-2 py-1">Deaths</td>
+                <td className="border border-gray-300 px-2 py-1">{hoveredDisaster['Total Deaths'] || 'N/A'}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      )}
+
       {/* Legend */}
       <div className="text-sm text-red-600 font-semibold mt-4">
-        <p>
-          <span className="inline-block w-4 h-4 bg-red-600 rounded-full mr-2"></span>
-          Disaster Locations (hover for details)
-        </p>
+        <span
+          className="inline-block mr-2 rounded-full"
+          style={{
+            width: '14px',
+            height: '14px',
+            backgroundColor: '#ff4d4d',
+            border: '2px solid #ff0000',
+            display: 'inline-block',
+          }}
+        ></span>
+        Disaster Locations (hover for details)
       </div>
     </div>
   );
