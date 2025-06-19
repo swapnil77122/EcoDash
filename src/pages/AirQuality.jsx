@@ -17,16 +17,18 @@ L.Icon.Default.mergeOptions({
 
 // Suggestion List
 const citySuggestions = [
-  "Delhi", "Mumbai", "Bangalore", "Chennai", "Kolkata",
+ "Delhi", "Mumbai", "Bangalore", "Chennai", "Kolkata",
   "Hyderabad", "Pune", "Ahmedabad", "Jaipur", "Surat",
-  "Lucknow", "Kanpur", "Nagpur", "Indore", "Bhopal",
-  "Visakhapatnam", "Thane", "Patna", "Ludhiana", "Agra",
-  "Nashik", "Vadodara", "Varanasi", "Amritsar", "Ranchi",
-  "New York", "Los Angeles", "Chicago", "San Francisco", "London",
+  "Lucknow", "Kanpur", "Nagpur", "Bhopal",
+  "Ludhiana", "Agra",
+  "Coimbatore", "Chandigarh",
+
+  // International - Major Cities
+  "New York", "Los Angeles",  "San Francisco", "London",
   "Paris", "Berlin", "Tokyo", "Osaka", "Seoul",
   "Beijing", "Shanghai", "Hong Kong", "Dubai", "Singapore",
   "Bangkok", "Kuala Lumpur", "Toronto", "Vancouver", "Sydney",
-  "Melbourne", "São Paulo", "Mexico City", "Moscow", "Istanbul"
+  "Melbourne", "Mexico City", "Moscow", "Istanbul"
 ];
 
 // Component to show zoom level

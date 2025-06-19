@@ -10,16 +10,16 @@ const citySuggestions = [
   // India - Major Metro Cities
   "Delhi", "Mumbai", "Bangalore", "Chennai", "Kolkata",
   "Hyderabad", "Pune", "Ahmedabad", "Jaipur", "Surat",
-  "Lucknow", "Kanpur", "Nagpur", "Indore", "Bhopal",
+  "Lucknow", "Kanpur", "Nagpur", "Bhopal",
   "Ludhiana", "Agra",
   "Coimbatore", "Chandigarh",
 
   // International - Major Cities
-  "New York", "Los Angeles", "Chicago", "San Francisco", "London",
+  "New York", "Los Angeles",  "San Francisco", "London",
   "Paris", "Berlin", "Tokyo", "Osaka", "Seoul",
   "Beijing", "Shanghai", "Hong Kong", "Dubai", "Singapore",
   "Bangkok", "Kuala Lumpur", "Toronto", "Vancouver", "Sydney",
-  "Melbourne", "São Paulo", "Mexico City", "Moscow", "Istanbul"
+  "Melbourne", "Mexico City", "Moscow", "Istanbul"
 ];
 
 
