@@ -52,17 +52,7 @@ const SeaLevelLineChart = forwardRef(({ refData }) => {
       <h3 className="text-base font-semibold mb-1">
         🌊 Sea Level Rise 
       </h3>
-      <p className="text-xs text-gray-600 mb-3">
-        Data source:{" "}
-        <a
-          href="https://raw.githubusercontent.com/datasets/sea-level-rise/master/data/epa-sea-level.csv"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-blue-600 underline"
-        >
-          NOAA Data
-        </a>
-      </p>
+      
 
       {loading ? (
         <p className="text-blue-600 text-xs italic">Loading sea level data...</p>

@@ -18,7 +18,7 @@ L.Icon.Default.mergeOptions({
 // Suggestion List
 const citySuggestions = [
  "Delhi", "Mumbai", "Bangalore", "Chennai", "Kolkata",
-  "Hyderabad", "Pune", "Ahmedabad", "Jaipur", "Surat",
+  "Hyderabad", "Pune", "Ahmedabad", "Jaipur", 
   "Lucknow", "Kanpur", "Nagpur", "Bhopal",
   "Ludhiana", "Agra",
   "Coimbatore", "Chandigarh",
