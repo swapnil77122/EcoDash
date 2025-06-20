@@ -8,34 +8,64 @@ import {
   ResponsiveContainer,
   CartesianGrid,
 } from "recharts";
+import Papa from "papaparse";
 
 const SeaLevelLineChart = forwardRef(({ refData }) => {
   const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(true); 
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const years = Array.from({ length: 50 }, (_, i) => 1970 + i);
-    const fakeData = years.map((year, i) => ({
-      year,
-      level: parseFloat((i * 3.3 + Math.random()).toFixed(2)), 
-    }));
+    const url =
+      "https://raw.githubusercontent.com/datasets/sea-level-rise/master/data/epa-sea-level.csv";
 
-    setTimeout(() => { 
-      setData(fakeData);
-      setLoading(false); 
-    }, 500);
+    Papa.parse(url, {
+      download: true,
+      header: true,
+      complete: (results) => {
+        const cleaned = results.data
+          .filter(
+            (row) =>
+              row.Year &&
+              row["NOAA Adjusted Sea Level"] &&
+              !isNaN(parseFloat(row["NOAA Adjusted Sea Level"])) &&
+              parseInt(row.Year) >= 1970
+          )
+          .map((row) => ({
+            year: parseInt(row.Year),
+            level: parseFloat(row["NOAA Adjusted Sea Level"]),
+          }));
+
+        setData(cleaned);
+        setLoading(false);
+      },
+      error: (err) => {
+        console.error("CSV Parse Error:", err);
+        setLoading(false);
+      },
+    });
   }, []);
 
   useImperativeHandle(refData, () => data, [data]);
 
   return (
     <div className="bg-white p-4 rounded-xl shadow text-black text-sm">
-      <h3 className="text-base font-semibold mb-3">
-        📈 Simulated Sea Level Rise (mm/year)
+      <h3 className="text-base font-semibold mb-1">
+        🌊 Sea Level Rise 
       </h3>
+      <p className="text-xs text-gray-600 mb-3">
+        Data source:{" "}
+        <a
+          href="https://raw.githubusercontent.com/datasets/sea-level-rise/master/data/epa-sea-level.csv"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-blue-600 underline"
+        >
+          NOAA Data
+        </a>
+      </p>
 
       {loading ? (
-        <p className="text-blue-600 text-xs italic">Loading simulated sea level data...</p>
+        <p className="text-blue-600 text-xs italic">Loading sea level data...</p>
       ) : (
         <ResponsiveContainer width="100%" height={300}>
           <LineChart data={data}>
@@ -49,6 +79,8 @@ const SeaLevelLineChart = forwardRef(({ refData }) => {
               tick={{ fill: "#000", fontWeight: 500, fontSize: 10 }}
             />
             <Tooltip
+              formatter={(value) => `${value.toFixed(2)} mm`}
+              labelFormatter={(label) => `Year: ${label}`}
               contentStyle={{ fontSize: "10px" }}
               labelStyle={{ fontSize: "10px" }}
             />

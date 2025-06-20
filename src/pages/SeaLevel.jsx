@@ -33,7 +33,7 @@ const SeaLevel = () => {
       <Card>
         <h1 className="text-sm font-semibold text-black">🌊 Global Sea Level Rise</h1>
         <p className="text-gray-700 text-xs">
-          Observe sea level changes over time from NOAA data.
+          Observe sea level changes 
         </p>
       </Card>
 
