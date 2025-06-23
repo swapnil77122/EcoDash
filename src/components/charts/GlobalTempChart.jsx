@@ -10,7 +10,6 @@ import {
 } from 'recharts';
 import Papa from 'papaparse';
 
-// ✅ HadCRUT4 global temperature anomaly dataset
 const CSV_URL =
   'https://raw.githubusercontent.com/owid/owid-datasets/master/datasets/Global%20temperature%20anomaly%20-%20Met%20Office%20(HadCRUT4)/Global%20temperature%20anomaly%20-%20Met%20Office%20(HadCRUT4).csv';
 
@@ -23,15 +22,14 @@ const GlobalTempChart = () => {
       .then((csvText) => {
         const parsed = Papa.parse(csvText, { header: true }).data;
 
-        // Find the right column
-        const anomalyKey = 'Median temperature anomaly ';
+        const anomalyKey = 'Median temperature anomaly from 1961-1990 average';
 
         const filtered = parsed
           .filter((row) => row.Year && row[anomalyKey])
-          .slice(-50) // last 50 years
+          .slice(-50)
           .map((row) => ({
             year: +row.Year,
-            temp: +(14 + parseFloat(row[anomalyKey])).toFixed(2), // base temp + anomaly
+            temp: +(14 + parseFloat(row[anomalyKey])).toFixed(2),
           }));
 
         setData(filtered);
