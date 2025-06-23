@@ -6,43 +6,50 @@ import {
   YAxis,
   CartesianGrid,
   Tooltip,
-  ResponsiveContainer
+  ResponsiveContainer,
 } from 'recharts';
+import Papa from 'papaparse';
 
-const CSV_URL = 'https://raw.githubusercontent.com/owid/co2-data/master/owid-co2-data.csv';
+// ✅ HadCRUT4 global temperature anomaly dataset
+const CSV_URL =
+  'https://raw.githubusercontent.com/owid/owid-datasets/master/datasets/Global%20temperature%20anomaly%20-%20Met%20Office%20(HadCRUT4)/Global%20temperature%20anomaly%20-%20Met%20Office%20(HadCRUT4).csv';
 
 const GlobalTempChart = () => {
   const [data, setData] = useState([]);
 
   useEffect(() => {
     fetch(CSV_URL)
-      .then(res => res.text())
-      .then(text => {
-        const lines = text.split('\n');
-        const headers = lines[0].split(',');
-        const idxCountry = headers.indexOf('country');
-        const idxYear = headers.indexOf('year');
-        const idxTemp = headers.indexOf('co2'); // using CO2 to simulate temp
+      .then((res) => res.text())
+      .then((csvText) => {
+        const parsed = Papa.parse(csvText, { header: true }).data;
 
-        const global = lines
-          .map(line => line.split(','))
-          .filter(cols => cols[idxCountry] === 'World')
+        // Find the right column
+        const anomalyKey = 'Median temperature anomaly ';
+
+        const filtered = parsed
+          .filter((row) => row.Year && row[anomalyKey])
           .slice(-50) // last 50 years
-          .map(cols => ({
-            year: +cols[idxYear],
-            temp: +cols[idxTemp] * 1e-3 + 14 // simulate temp around 14°C
+          .map((row) => ({
+            year: +row.Year,
+            temp: +(14 + parseFloat(row[anomalyKey])).toFixed(2), // base temp + anomaly
           }));
 
-        setData(global);
+        setData(filtered);
       })
       .catch(console.error);
   }, []);
 
-  if (!data.length) return <div className="text-center text-black text-sm">Loading temperature...</div>;
+  if (!data.length) {
+    return (
+      <div className="text-center text-black text-sm">Loading temperature data...</div>
+    );
+  }
 
   return (
     <div className="bg-white p-4 rounded-xl shadow text-black">
-      <h3 className="text-base font-semibold mb-3">🌡️ Simulated Global Temperature Trend</h3>
+      <h3 className="text-base font-semibold mb-3">
+        🌡️ Global Temperature Trend (Last 50 Years)
+      </h3>
       <ResponsiveContainer width="100%" height={400}>
         <LineChart data={data}>
           <CartesianGrid strokeDasharray="3 3" />
@@ -55,7 +62,13 @@ const GlobalTempChart = () => {
             tick={{ fill: '#000', fontSize: 10, fontWeight: 'bold' }}
           />
           <Tooltip />
-          <Line type="monotone" dataKey="temp" stroke="#ef4444" strokeWidth={2} dot={{ r: 1.5 }} />
+          <Line
+            type="monotone"
+            dataKey="temp"
+            stroke="#ef4444"
+            strokeWidth={2}
+            dot={{ r: 2 }}
+          />
         </LineChart>
       </ResponsiveContainer>
     </div>
