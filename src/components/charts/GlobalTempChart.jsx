@@ -55,10 +55,16 @@ const GlobalTempChart = () => {
             dataKey="year"
             tick={{ fill: '#000', fontSize: 10, fontWeight: 'bold' }}
           />
-          <YAxis
-            unit="°C"
-            tick={{ fill: '#000', fontSize: 10, fontWeight: 'bold' }}
-          />
+        <YAxis
+  unit="°C"
+  domain={[
+    (dataMin) => Math.floor(dataMin - 0.2),
+    (dataMax) => Math.ceil(dataMax + 0.2)
+  ]}
+  tick={{ fill: '#000', fontSize: 10, fontWeight: 'bold' }}
+/>
+
+
           <Tooltip />
           <Line
             type="monotone"
