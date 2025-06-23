@@ -10,6 +10,12 @@ import Energy from "./pages/Energy";
 import About from "./pages/About";
 import NotFound from "./pages/NotFound";
 import IceLevelPage from "./pages/IceLevelPage";
+
+
+
+
+
+
 const routes = [
   { path: "/", Component: Overview },
   { path: "/emissions", Component: Emissions },
