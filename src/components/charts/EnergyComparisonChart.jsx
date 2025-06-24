@@ -101,7 +101,7 @@ const EnergyComparisonChart = forwardRef(({ refData, onDataReady }, ref) => {
 
   return (
     <div className="relative bg-white p-4 rounded-xl shadow text-black text-sm" style={{ userSelect: "none" }}>
-      <h3 className="text-base font-semibold mb-3">🔋 Total Renewable vs Non-Renewable Energy (TWh)</h3>
+      <h4 className="text-base font-semibold mb-3">🔋 Total Renewable vs Non-Renewable Energy (TWh)</h4>
       <ManualTooltip hoverData={hoverData} position={mousePos} />
       <ResponsiveContainer width="100%" height={300}>
         <BarChart data={chartData}>
