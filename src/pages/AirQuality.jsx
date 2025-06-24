@@ -23,7 +23,7 @@ const citySuggestions = [
   "Ludhiana", "Agra",
   "Coimbatore", "Chandigarh",
 
-  // International - Major Cities
+
   "New York", "Los Angeles",  "San Francisco", "London",
   "Paris", "Berlin", "Tokyo", "Osaka", "Seoul",
   "Beijing", "Shanghai", "Hong Kong", "Dubai", "Singapore",
