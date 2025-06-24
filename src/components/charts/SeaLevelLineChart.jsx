@@ -46,6 +46,7 @@ const SeaLevelLineChart = forwardRef(({ refData }) => {
   }, []);
 
   useImperativeHandle(refData, () => data, [data]);
+  console.log("Sea level Data",data)
 
   return (
     <div className="bg-white p-4 rounded-xl shadow text-black text-sm">
@@ -59,11 +60,12 @@ const SeaLevelLineChart = forwardRef(({ refData }) => {
       ) : (
         <ResponsiveContainer width="100%" height={300}>
           <LineChart data={data}>
+            
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis
               dataKey="year"
               tick={{ fill: "#000", fontWeight: 500, fontSize: 10 }}
-            />
+            />``
             <YAxis
               unit=" mm"
               tick={{ fill: "#000", fontWeight: 500, fontSize: 10 }}

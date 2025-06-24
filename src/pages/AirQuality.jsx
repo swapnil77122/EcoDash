@@ -129,6 +129,7 @@ const AirQuality = () => {
             onChange={handleInputChange}
             className="p-2 border border-gray-300 rounded w-full text-sm"
           />
+          
           {suggestions.length > 0 && (
             <ul className="absolute z-10 bg-white border border-gray-300 rounded w-full mt-1 shadow text-sm max-h-48 overflow-y-auto">
               {suggestions.map((s, i) => (

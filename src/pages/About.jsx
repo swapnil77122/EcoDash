@@ -1,7 +1,11 @@
 import { Card, CardContent } from "../components/ui/Card";
 
+
+
 const About = () => {
   return (
+
+  
     <div className="p-6 space-y-8 bg-white text-gray-800 text-sm">
       <header className="text-center">
         <h1 className="text-3xl font-bold text-blue-700 mb-1">
@@ -11,6 +15,7 @@ const About = () => {
           Real-time insights into global environmental indicators.
         </p>
       </header>
+
 
       <section className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {/* Dashboard Purpose */}

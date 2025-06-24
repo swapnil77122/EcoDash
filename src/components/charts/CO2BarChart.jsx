@@ -60,7 +60,7 @@ const CustomBar = ({ x, y, width, height, fill, payload, onHover }) => {
 const CO2BarChart = () => {
   const [data, setData] = useState([]);
   const [rawData, setRawData] = useState([]);
-  const [year, setYear] = useState('2021');
+  const [year, setYear] = useState('2019');
   const [hoverData, setHoverData] = useState(null);
   const [mousePos, setMousePos] = useState(null);
 
