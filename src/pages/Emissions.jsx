@@ -14,7 +14,7 @@ const TARGET_COUNTRIES = [
 export default function Emissions() {
   const [data, setData] = useState([]);
   const [rawData, setRawData] = useState([]);
-  const [year] = useState('2021'); // year state still used
+  const [year] = useState('2021'); 
   const [error, setError] = useState(null);
   const chartRef = useRef();
 
