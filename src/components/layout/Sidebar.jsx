@@ -49,7 +49,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
               className={({ isActive }) =>
                 `flex items-center gap-2 px-3 py-2 rounded-md text-sm transition ${
                   isActive
-                    ? "bg-blue-800 text-white hover:bg-red-800"
+                    ? "bg-blue-800 text-white hover:bg-blue-800"
                     : "text-black hover:bg-blue-500 hover:text-white"
                 }`
               }
