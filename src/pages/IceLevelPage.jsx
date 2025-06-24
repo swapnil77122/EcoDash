@@ -14,7 +14,7 @@ import Papa from "papaparse";
 const IceLevelPage = () => {
   const [data, setData] = useState([]);
   const [filteredYear, setFilteredYear] = useState("All");
-  const [loading, setLoading] = useState(true); // ✅ Added loading state
+  const [loading, setLoading] = useState(true); 
 
   useEffect(() => {
     fetch("/data/ice_level.csv")
