@@ -15,7 +15,6 @@ import IceLevelPage from "./pages/IceLevelPage";
 
 
 
-
 const routes = [
   { path: "/", Component: Overview },
   { path: "/emissions", Component: Emissions },
